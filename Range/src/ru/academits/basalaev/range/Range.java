@@ -9,6 +9,11 @@ public class Range {
         this.to = to;
     }
 
+    public Range(Range range) {
+        from = range.from;
+        to = range.to;
+    }
+
     public double getFrom() {
         return from;
     }
@@ -30,16 +35,20 @@ public class Range {
     }
 
     public boolean isInside(double number) {
-        return number >= from && to >= number;
+        return number >= from && number <= to;
     }
 
-    public Range[] getRangesUnion(Range range) {
+    public String toString() {
+        return String.format("Начало диапазона: %.2f%nКонец диапазона: %.2f", from, to);
+    }
+
+    public Range[] getUnion(Range range) {
         if (to < range.from) {
-            return new Range[]{this, range};
+            return new Range[]{new Range(this), new Range(range)};
         }
 
         if (from > range.to) {
-            return new Range[]{range, this};
+            return new Range[]{new Range(range), new Range(this)};
         }
 
         double from = Math.min(this.from, range.from);
@@ -48,7 +57,7 @@ public class Range {
         return new Range[]{new Range(from, to)};
     }
 
-    public Range getRangesIntersection(Range range) {
+    public Range getIntersection(Range range) {
         if (to <= range.from || from >= range.to) {
             return null;
         }
@@ -59,16 +68,16 @@ public class Range {
         return new Range(from, to);
     }
 
-    public Range[] getRangesAsymmetricalDifference(Range range) {
+    public Range[] getDifference(Range range) {
         if (to <= range.from || from >= range.to) {
-            return new Range[]{this};
+            return new Range[]{new Range(this)};
         }
 
         if (from >= range.from && to <= range.to) {
             return new Range[0];
         }
 
-        if (from < range.from && this.to > range.to) {
+        if (from < range.from && to > range.to) {
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
