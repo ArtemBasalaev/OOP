@@ -2,7 +2,7 @@ package ru.academits.basalaev.shapes;
 
 import java.util.Objects;
 
-public class Triangle implements Shape{
+public class Triangle implements Shape {
     private double x1;
     private double y1;
     private double x2;
@@ -10,8 +10,12 @@ public class Triangle implements Shape{
     private double x3;
     private double y3;
 
+    private boolean isTriangle(double x1, double y1, double x2, double y2, double x3, double y3) {
+        return (x1 - x3) * (y2 - y3) != (x2 - x3) * (y1 - y3);
+    }
+
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -28,7 +32,7 @@ public class Triangle implements Shape{
     }
 
     public void setX1(double x1) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -40,7 +44,7 @@ public class Triangle implements Shape{
     }
 
     public void setY1(double y1) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -52,7 +56,7 @@ public class Triangle implements Shape{
     }
 
     public void setX2(double x2) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -64,7 +68,7 @@ public class Triangle implements Shape{
     }
 
     public void setY2(double y2) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -76,7 +80,7 @@ public class Triangle implements Shape{
     }
 
     public void setX3(double x3) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 
@@ -88,7 +92,7 @@ public class Triangle implements Shape{
     }
 
     public void setY3(double y3) {
-        if ((x1 - x3) * (y2 - y3) == (x2 - x3) * (y1 - y3)) {
+        if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
             throw new IllegalArgumentException("Точки лежат на одной прямой. Фигура не треугольник");
         }
 

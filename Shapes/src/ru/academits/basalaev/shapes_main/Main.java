@@ -1,7 +1,6 @@
 package ru.academits.basalaev.shapes_main;
 
 import ru.academits.basalaev.shapes.*;
-
 import java.util.Arrays;
 
 public class Main {
