@@ -28,9 +28,12 @@ public class CsvFileToHtml {
             return;
         }
 
-        try (Scanner scanner = new Scanner(new FileInputStream(args[0]));
-             PrintWriter writer = new PrintWriter(args[1])) {
-            StringBuilder tableCell = new StringBuilder();
+        String inputFile = args[0];
+        String outputFile = args[1];
+
+        try (Scanner scanner = new Scanner(new FileInputStream(inputFile));
+             PrintWriter writer = new PrintWriter(outputFile)) {
+            StringBuilder tableCellStringBuilder = new StringBuilder();
 
             writer.println("<!DOCTYPE html>");
             writer.println("<html>");
@@ -63,42 +66,42 @@ public class CsvFileToHtml {
                     }
 
                     if (symbol == '>') {
-                        tableCell.append("&gt;");
+                        tableCellStringBuilder.append("&gt;");
 
                         continue;
                     }
 
                     if (symbol == '<') {
-                        tableCell.append("&lt;");
+                        tableCellStringBuilder.append("&lt;");
 
                         continue;
                     }
 
                     if (symbol == '&') {
-                        tableCell.append("&amp;");
+                        tableCellStringBuilder.append("&amp;");
 
                         continue;
                     }
 
-                    if (tableCell.length() != 0 && i == 0) {
-                        tableCell.append("<br/>");
+                    if (tableCellStringBuilder.length() != 0 && i == 0) {
+                        tableCellStringBuilder.append("<br/>");
                     }
 
                     if (doubleQuotesCountInSubString % 2 == 0 && (symbol == ',' || i == string.length() - 1)) {
                         if (symbol != ',') {
-                            tableCell.append(string.charAt(i));
+                            tableCellStringBuilder.append(string.charAt(i));
                         }
 
                         if (doubleQuotesCountInSubString != 0) {
-                            tableCell.deleteCharAt(tableCell.length() - 1);
+                            tableCellStringBuilder.deleteCharAt(tableCellStringBuilder.length() - 1);
                             doubleQuotesCountInSubString = 0;
                         }
 
                         writer.print("\t\t\t<td>");
-                        writer.print(tableCell);
+                        writer.print(tableCellStringBuilder);
                         writer.println("</td>");
 
-                        tableCell.setLength(0);
+                        tableCellStringBuilder.setLength(0);
 
                         continue;
                     }
@@ -107,7 +110,7 @@ public class CsvFileToHtml {
                         continue;
                     }
 
-                    tableCell.append(symbol);
+                    tableCellStringBuilder.append(symbol);
                 }
 
                 if (doubleQuotesCountInString % 2 == 0) {
@@ -126,7 +129,7 @@ public class CsvFileToHtml {
             writer.println("</body>");
             writer.println("</html>");
         } catch (IOException e) {
-            System.out.println("Исходный файл " + args[0] + " не найден либо путь для сохранения указан не верно");
+            System.out.println("Исходный файл " + inputFile + " не найден либо путь для сохранения указан не верно");
         }
     }
 }
