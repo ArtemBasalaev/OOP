@@ -1,13 +1,11 @@
 package ru.academits.basalaev.shapes;
 
-import java.util.Objects;
-
-public class Circle implements Shape{
+public class Circle implements Shape {
     private double radius;
 
     public Circle(double radius) {
         if (radius <= 0) {
-            throw new IllegalArgumentException("Значение радиуса должно быть положительным числом");
+            throw new IllegalArgumentException("Значение радиуса должно быть положительным числом, переданное значение r = " + radius);
         }
 
         this.radius = radius;
@@ -19,7 +17,7 @@ public class Circle implements Shape{
 
     public void setRadius(double radius) {
         if (radius <= 0) {
-            throw new IllegalArgumentException("Значение радиуса должно быть положительным числом");
+            throw new IllegalArgumentException("Значение радиуса должно быть положительным числом, переданное значение r = " + radius);
         }
 
         this.radius = radius;
@@ -27,7 +25,7 @@ public class Circle implements Shape{
 
     @Override
     public String toString() {
-        return String.format("окружность с радиусом %.2f", radius);
+        return String.format("Окружность с радиусом r = %.1f", radius);
     }
 
     @Override
@@ -42,28 +40,36 @@ public class Circle implements Shape{
 
         Circle circle = (Circle) o;
 
-        return (circle.radius == radius);
+        return circle.radius == radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(radius);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = hash * prime + Double.hashCode(radius);
+
+        return hash;
     }
 
+    @Override
     public double getWidth() {
         return 2 * radius;
     }
 
+    @Override
     public double getHeight() {
         return 2 * radius;
     }
 
+    @Override
     public double getArea() {
         return Math.PI * Math.pow(radius, 2);
     }
 
+    @Override
     public double getPerimeter() {
         return 2 * Math.PI * radius;
-
     }
 }

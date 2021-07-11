@@ -1,7 +1,5 @@
 package ru.academits.basalaev.shapes;
 
-import java.util.Objects;
-
 public class Triangle implements Shape {
     private double x1;
     private double y1;
@@ -9,10 +7,6 @@ public class Triangle implements Shape {
     private double y2;
     private double x3;
     private double y3;
-
-    private boolean isTriangle(double x1, double y1, double x2, double y2, double x3, double y3) {
-        return (x1 - x3) * (y2 - y3) != (x2 - x3) * (y1 - y3);
-    }
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         if (!isTriangle(x1, y1, x2, y2, x3, y3)) {
@@ -99,9 +93,15 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
+    private static boolean isTriangle(double x1, double y1, double x2, double y2, double x3, double y3) {
+        double epsilon = 1.0e-6;
+
+        return Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) > epsilon;
+    }
+
     @Override
     public String toString() {
-        return String.format("треугольник со сторонами A = %.2f; B = %.2f; C = %.2f", getSideA(), getSideB(), getSideC());
+        return String.format("Треугольник с вершинами A(%.1f;%.1f), B(%.1f;%.1f), C(%.1f;%.1f)", x1, y1, x2, y2, x3, y3);
     }
 
     @Override
@@ -122,9 +122,20 @@ public class Triangle implements Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x1, y1, x2, y2, x3, y3);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = hash * prime + Double.hashCode(x1);
+        hash = hash * prime + Double.hashCode(y1);
+        hash = hash * prime + Double.hashCode(x2);
+        hash = hash * prime + Double.hashCode(y2);
+        hash = hash * prime + Double.hashCode(x3);
+        hash = hash * prime + Double.hashCode(y3);
+
+        return hash;
     }
 
+    @Override
     public double getWidth() {
         double max = Math.max(x1, Math.max(x2, x3));
         double min = Math.min(x1, Math.min(x2, x3));
@@ -132,6 +143,7 @@ public class Triangle implements Shape {
         return max - min;
     }
 
+    @Override
     public double getHeight() {
         double max = Math.max(y1, Math.max(y2, y3));
         double min = Math.min(y1, Math.min(y2, y3));
@@ -139,25 +151,35 @@ public class Triangle implements Shape {
         return max - min;
     }
 
-    public double getSideA() {
+    private static double getEdge(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
-    public double getSideB() {
-        return Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
+    public double getEdgeA() {
+        return getEdge(x1, y1, x2, y2);
     }
 
-    public double getSideC() {
-        return Math.sqrt(Math.pow(x3 - x1, 2) + Math.pow(y3 - y1, 2));
+    public double getEdgeB() {
+        return getEdge(x3, y3, x2, y2);
     }
 
+    public double getEdgeC() {
+        return getEdge(x1, y1, x3, y3);
+    }
+
+    @Override
     public double getArea() {
-        double semiPerimeter = getPerimeter() / 2;
+        double edgeA = getEdgeA();
+        double edgeB = getEdgeB();
+        double edgeC = getEdgeC();
 
-        return Math.sqrt(semiPerimeter * (semiPerimeter - getSideA()) * (semiPerimeter - getSideB()) * (semiPerimeter - getSideC()));
+        double semiPerimeter = (edgeA + edgeB + edgeC) / 2;
+
+        return Math.sqrt(semiPerimeter * (semiPerimeter - edgeA) * (semiPerimeter - edgeB) * (semiPerimeter - edgeC));
     }
 
+    @Override
     public double getPerimeter() {
-        return getSideA() + getSideB() + getSideC();
+        return getEdgeA() + getEdgeB() + getEdgeC();
     }
 }

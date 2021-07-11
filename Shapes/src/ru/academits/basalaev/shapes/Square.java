@@ -1,33 +1,33 @@
 package ru.academits.basalaev.shapes;
 
-import java.util.Objects;
+public class Square implements Shape {
+    private double edge;
 
-public class Square implements Shape{
-    private double side;
-
-    public Square(double side) {
-        if (side <= 0) {
-            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом");
+    public Square(double edge) {
+        if (edge <= 0) {
+            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
+                    "переданное значение edge = " + edge);
         }
 
-        this.side = side;
+        this.edge = edge;
     }
 
-    public double getSide() {
-        return side;
+    public double getEdge() {
+        return edge;
     }
 
-    public void setSide(double side) {
-        if (side <= 0) {
-            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом");
+    public void setEdge(double edge) {
+        if (edge <= 0) {
+            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
+                    "переданное значение edge = " + edge);
         }
 
-        this.side = side;
+        this.edge = edge;
     }
 
     @Override
     public String toString() {
-        return String.format("квадрат со стороной: %.2f", side);
+        return String.format("Квадрат со стороной: edge = %.1f", edge);
     }
 
     @Override
@@ -42,27 +42,36 @@ public class Square implements Shape{
 
         Square square = (Square) o;
 
-        return (square.side == side);
+        return square.edge == edge;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(side);
+        final int prime = 37;
+        int hash = 1;
+
+        hash = hash * prime + Double.hashCode(edge);
+
+        return hash;
     }
 
+    @Override
     public double getWidth() {
-        return side;
+        return edge;
     }
 
+    @Override
     public double getHeight() {
-        return side;
+        return edge;
     }
 
+    @Override
     public double getArea() {
-        return Math.pow(side, 2);
+        return Math.pow(edge, 2);
     }
 
+    @Override
     public double getPerimeter() {
-        return 4 * side;
+        return 4 * edge;
     }
 }
