@@ -5,13 +5,23 @@ public class Rectangle implements Shape {
     private double height;
 
     public Rectangle(double width, double height) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException("Значения сторон прямоугольника должны быть положительными числами, " +
-                    "переданные значения width = " + width + " height = " + height);
+        if (width <= 0) {
+            throw new IllegalArgumentException("Значение ширины прямоугольника должно быть положительным числом, " +
+                    "width = " + width);
+        }
+
+        if (height <= 0) {
+            throw new IllegalArgumentException("Значение высоты прямоугольника должно быть положительным числом, " +
+                    "height = " + height);
         }
 
         this.width = width;
         this.height = height;
+    }
+
+    @Override
+    public double getWidth() {
+        return width;
     }
 
     public void setWidth(double width) {
@@ -21,6 +31,11 @@ public class Rectangle implements Shape {
         }
 
         this.width = width;
+    }
+
+    @Override
+    public double getHeight() {
+        return height;
     }
 
     public void setHeight(double height) {
@@ -49,7 +64,7 @@ public class Rectangle implements Shape {
 
         Rectangle rectangle = (Rectangle) o;
 
-        return (rectangle.width == width) && (rectangle.height == height);
+        return rectangle.width == width && rectangle.height == height;
     }
 
     @Override
@@ -61,16 +76,6 @@ public class Rectangle implements Shape {
         hash = prime * hash + Double.hashCode(height);
 
         return hash;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getHeight() {
-        return height;
     }
 
     @Override

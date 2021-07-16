@@ -101,7 +101,7 @@ public class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Треугольник с вершинами A(%.1f;%.1f), B(%.1f;%.1f), C(%.1f;%.1f)", x1, y1, x2, y2, x3, y3);
+        return String.format("Треугольник с вершинами A(%.1f; %.1f), B(%.1f; %.1f), C(%.1f; %.1f)", x1, y1, x2, y2, x3, y3);
     }
 
     @Override
@@ -116,7 +116,8 @@ public class Triangle implements Shape {
 
         Triangle triangle = (Triangle) o;
 
-        return (triangle.x1 == x1) && (triangle.y1 == y1) && (triangle.x2 == x2) && (triangle.y2 == y2)
+        return (triangle.x1 == x1) && (triangle.y1 == y1)
+                && (triangle.x2 == x2) && (triangle.y2 == y2)
                 && (triangle.x3 == x3) && (triangle.y3 == y3);
     }
 
@@ -151,35 +152,35 @@ public class Triangle implements Shape {
         return max - min;
     }
 
-    private static double getEdge(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    private static double getEdgeLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-    public double getEdgeA() {
-        return getEdge(x1, y1, x2, y2);
+    public double getEdgeAbLength() {
+        return getEdgeLength(x1, y1, x2, y2);
     }
 
-    public double getEdgeB() {
-        return getEdge(x3, y3, x2, y2);
+    public double getEdgeBcLength() {
+        return getEdgeLength(x3, y3, x2, y2);
     }
 
-    public double getEdgeC() {
-        return getEdge(x1, y1, x3, y3);
+    public double getEdgeAcLength() {
+        return getEdgeLength(x1, y1, x3, y3);
     }
 
     @Override
     public double getArea() {
-        double edgeA = getEdgeA();
-        double edgeB = getEdgeB();
-        double edgeC = getEdgeC();
+        double edgeAbLength = getEdgeAbLength();
+        double edgeBcLength = getEdgeBcLength();
+        double edgeAcLength = getEdgeAcLength();
 
-        double semiPerimeter = (edgeA + edgeB + edgeC) / 2;
+        double semiPerimeter = (edgeAbLength + edgeBcLength + edgeAcLength) / 2;
 
-        return Math.sqrt(semiPerimeter * (semiPerimeter - edgeA) * (semiPerimeter - edgeB) * (semiPerimeter - edgeC));
+        return Math.sqrt(semiPerimeter * (semiPerimeter - edgeAbLength) * (semiPerimeter - edgeBcLength) * (semiPerimeter - edgeAcLength));
     }
 
     @Override
     public double getPerimeter() {
-        return getEdgeA() + getEdgeB() + getEdgeC();
+        return getEdgeAbLength() + getEdgeBcLength() + getEdgeAcLength();
     }
 }

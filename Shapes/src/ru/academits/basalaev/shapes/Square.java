@@ -1,33 +1,33 @@
 package ru.academits.basalaev.shapes;
 
 public class Square implements Shape {
-    private double edge;
+    private double edgeLength;
 
-    public Square(double edge) {
-        if (edge <= 0) {
+    public Square(double edgeLength) {
+        if (edgeLength <= 0) {
             throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
-                    "переданное значение edge = " + edge);
+                    "переданное значение edge = " + edgeLength);
         }
 
-        this.edge = edge;
+        this.edgeLength = edgeLength;
     }
 
-    public double getEdge() {
-        return edge;
+    public double getEdgeLength() {
+        return edgeLength;
     }
 
-    public void setEdge(double edge) {
-        if (edge <= 0) {
+    public void setEdgeLength(double edgeLength) {
+        if (edgeLength <= 0) {
             throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
-                    "переданное значение edge = " + edge);
+                    "переданное значение edge = " + edgeLength);
         }
 
-        this.edge = edge;
+        this.edgeLength = edgeLength;
     }
 
     @Override
     public String toString() {
-        return String.format("Квадрат со стороной: edge = %.1f", edge);
+        return String.format("Квадрат со стороной: edge = %.1f", edgeLength);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Square implements Shape {
 
         Square square = (Square) o;
 
-        return square.edge == edge;
+        return square.edgeLength == edgeLength;
     }
 
     @Override
@@ -50,28 +50,28 @@ public class Square implements Shape {
         final int prime = 37;
         int hash = 1;
 
-        hash = hash * prime + Double.hashCode(edge);
+        hash = hash * prime + Double.hashCode(edgeLength);
 
         return hash;
     }
 
     @Override
     public double getWidth() {
-        return edge;
+        return edgeLength;
     }
 
     @Override
     public double getHeight() {
-        return edge;
+        return edgeLength;
     }
 
     @Override
     public double getArea() {
-        return Math.pow(edge, 2);
+        return edgeLength * edgeLength;
     }
 
     @Override
     public double getPerimeter() {
-        return 4 * edge;
+        return 4 * edgeLength;
     }
 }

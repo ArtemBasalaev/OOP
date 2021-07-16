@@ -8,8 +8,11 @@ public class Main {
     public static void main(String[] args) {
         try {
             Shape[] shapes = {
-                    new Square(1.0), new Circle(1.3), new Rectangle(1.3, 1.5),
-                    new Triangle(0, 0, 0, 5, 5, 0), new Circle(1.1), new Square(1.2)
+                    new Square(1.0),
+                    new Circle(1.3),
+                    new Rectangle(1.3, 1.5),
+                    new Triangle(0, 0, 0, 5, 5, 0),
+                    new Circle(1.1), new Square(1.2)
             };
 
             System.out.println("В массиве хранятся следующие фигуры:");
