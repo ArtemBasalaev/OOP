@@ -14,7 +14,7 @@ public class Main {
         System.out.println(vector2);
 
         vector1.add(vector2);
-        System.out.println("Результат сложения вектора со вторым вектором:");
+        System.out.println("Результат прибавления к вектору второго вектора:");
         System.out.println(vector1);
 
         vector1.multiplyScalar(5);
