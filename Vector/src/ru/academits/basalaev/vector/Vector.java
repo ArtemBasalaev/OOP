@@ -135,7 +135,7 @@ public class Vector {
 
     public double getElement(int index) {
         if (index < 0 || index >= elements.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса: 0 < index < " + elements.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + elements.length
                     + " передано значение: " + index);
         }
 
@@ -144,7 +144,7 @@ public class Vector {
 
     public void setElement(int index, double value) {
         if (index < 0 || index >= elements.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса: 0 < index < " + elements.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + elements.length
                     + " передано значение: " + index);
         }
 
