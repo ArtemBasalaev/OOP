@@ -7,7 +7,7 @@ public class Vector {
 
     public Vector(int elementsCount) {
         if (elementsCount <= 0) {
-            throw new IllegalArgumentException("Размерность вектора не может быть <=0, передано значение n = " + elementsCount);
+            throw new IllegalArgumentException("Размерность вектора не может быть <= 0, передано значение n = " + elementsCount);
         }
 
         elements = new double[elementsCount];
