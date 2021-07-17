@@ -7,7 +7,7 @@ public class Vector {
 
     public Vector(int elementsCount) {
         if (elementsCount <= 0) {
-            throw new IllegalArgumentException("Размерность вектора не может быть <= 0, передано значение n = " + elementsCount);
+            throw new IllegalArgumentException("Размерность вектора не может быть <= 0, передано значение: " + elementsCount);
         }
 
         elements = new double[elementsCount];
@@ -39,7 +39,7 @@ public class Vector {
         }
 
         if (elementsCount <= 0) {
-            throw new IllegalArgumentException("Размерность вектора не может быть <= 0, n = " + elementsCount);
+            throw new IllegalArgumentException("Размерность вектора не может быть <= 0, передано значение: " + elementsCount);
         }
 
         elements = Arrays.copyOf(array, elementsCount);
@@ -112,14 +112,15 @@ public class Vector {
         }
     }
 
-    public void multiplyScalar(double scalar) {
+    public void multiplyByScalar(double scalar) {
         for (int i = 0; i < elements.length; i++) {
             elements[i] *= scalar;
         }
     }
 
+
     public void reverse() {
-        multiplyScalar(-1);
+        multiplyByScalar(-1);
     }
 
     public double getLength() {
@@ -133,16 +134,18 @@ public class Vector {
     }
 
     public double getElement(int index) {
-        if (index >= elements.length || index < 0) {
-            throw new IndexOutOfBoundsException("Неверный индекс: index = " + index);
+        if (index < 0 || index >= elements.length) {
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса: 0 < index < " + elements.length
+                    + " передано значение: " + index);
         }
 
         return elements[index];
     }
 
     public void setElement(int index, double value) {
-        if (index >= elements.length || index < 0) {
-            throw new IndexOutOfBoundsException("Неверный индекс: index = " + index);
+        if (index < 0 || index >= elements.length) {
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса: 0 < index < " + elements.length
+                    + " передано значение: " + index);
         }
 
         elements[index] = value;
@@ -163,7 +166,7 @@ public class Vector {
         return result;
     }
 
-    public static Vector getSubtract(Vector vector1, Vector vector2) {
+    public static Vector getDifference(Vector vector1, Vector vector2) {
         if (vector1 == null) {
             throw new IllegalArgumentException("В качестве первого аргумента передана пустая ссылка");
         }
@@ -178,7 +181,7 @@ public class Vector {
         return result;
     }
 
-    public static double getMultiplication(Vector vector1, Vector vector2) {
+    public static double getScalarComposition(Vector vector1, Vector vector2) {
         if (vector1 == null) {
             throw new IllegalArgumentException("В качестве первого аргумента передана пустая ссылка");
         }
