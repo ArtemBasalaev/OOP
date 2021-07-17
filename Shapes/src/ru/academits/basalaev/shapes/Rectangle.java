@@ -49,7 +49,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Прямоугольник со сторонами width = %.1f; height = %.1f", width, height);
+        return String.format("Прямоугольник с шириной %.1f и высотой %.1f", width, height);
     }
 
     @Override

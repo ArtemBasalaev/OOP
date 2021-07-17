@@ -25,7 +25,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Окружность с радиусом r = %.1f", radius);
+        return String.format("Окружность с радиусом %.1f", radius);
     }
 
     @Override

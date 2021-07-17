@@ -5,8 +5,8 @@ public class Square implements Shape {
 
     public Square(double edgeLength) {
         if (edgeLength <= 0) {
-            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
-                    "переданное значение edge = " + edgeLength);
+            throw new IllegalArgumentException("Длина стороны квадрата должна быть положительным числом, " +
+                    "переданное значение edgeLength = " + edgeLength);
         }
 
         this.edgeLength = edgeLength;
@@ -18,8 +18,8 @@ public class Square implements Shape {
 
     public void setEdgeLength(double edgeLength) {
         if (edgeLength <= 0) {
-            throw new IllegalArgumentException("Значение стороны квадрата должно быть положительным числом, " +
-                    "переданное значение edge = " + edgeLength);
+            throw new IllegalArgumentException("Длина стороны квадрата должна быть положительным числом, "
+                    + "переданное значение edgeLength = " + edgeLength);
         }
 
         this.edgeLength = edgeLength;
@@ -27,7 +27,7 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Квадрат со стороной: edge = %.1f", edgeLength);
+        return String.format("Квадрат со стороной %.1f", edgeLength);
     }
 
     @Override
