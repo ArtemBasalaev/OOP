@@ -37,7 +37,7 @@ public class Main {
         System.out.println("Результат сложения двух матриц:");
         System.out.println(Matrix.getSum(matrix1, matrix2));
 
-        matrix1.multiplyScalar(10);
+        matrix1.multiplyByScalar(10);
         System.out.println("Результат умножения матрицы на скаляр:");
         System.out.println(matrix1);
 
@@ -45,13 +45,13 @@ public class Main {
         Matrix matrix4 = new Matrix(new double[][]{{1, 0}, {0, 1}, {1, 1}});
 
         System.out.println("Результат умножения матриц: matrix3 * matrix4");
-        System.out.println(Matrix.getMultiplication(matrix3, matrix4));
+        System.out.println(Matrix.getComposition(matrix3, matrix4));
 
         System.out.println("Результат умножения матриц: matrix4 * matrix3");
-        System.out.println(Matrix.getMultiplication(matrix4, matrix3));
+        System.out.println(Matrix.getComposition(matrix4, matrix3));
 
         Vector vector = new Vector(new double[]{2, -3, 1});
-        System.out.println("Результат умножения матрицы на вектор\n" + matrix1.getMultiplyVector(vector));
+        System.out.println("Результат умножения матрицы на вектор\n" + matrix1.getMultiplyByVector(vector));
 
         Matrix matrix5 = new Matrix(new double[][]{{1.9, 2.1, 5.1}, {4.2, 6.1, 3.1}, {5.7, 4.2, 2.8}});
         System.out.printf("Определитель матрицы determinant = %.2f%n", matrix5.getMatrixDeterminant());
