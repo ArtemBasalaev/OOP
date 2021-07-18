@@ -256,7 +256,9 @@ public class Matrix {
         Vector result = new Vector(vectorSize);
 
         for (int i = 0; i < vectorSize; i++) {
-            result.setElement(i, Vector.getScalarComposition(row[i], vector));
+            double element = Vector.getScalarComposition(row[i], vector);
+
+            result.setElement(i, element);
         }
 
         return result;
