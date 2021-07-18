@@ -343,13 +343,13 @@ public class Matrix {
             throw new IllegalArgumentException("Размер переданных матриц не позволяет умножать их между собой");
         }
 
-        int rowCounts = matrix2.row[0].getSize();
+        int rowsCount = matrix2.row[0].getSize();
         int columnsCount = matrix1.row.length;
 
-        Matrix result = new Matrix(columnsCount, rowCounts);
+        Matrix result = new Matrix(columnsCount, rowsCount);
 
         for (int i = 0; i < columnsCount; i++) {
-            for (int j = 0; j < rowCounts; j++) {
+            for (int j = 0; j < rowsCount; j++) {
                 double elementValue = Vector.getScalarComposition(matrix1.row[i], matrix2.getColumn(j));
 
                 result.row[i].setElement(j, elementValue);
