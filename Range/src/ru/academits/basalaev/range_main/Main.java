@@ -7,9 +7,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Range range1 = new Range(1.5, 3.2);
-        System.out.printf("Начало диапазона: %.2f%n", range1.getFrom());
-        System.out.printf("Конец диапазона: %.2f%n", range1.getTo());
-        System.out.printf("Длина диапазона: %.2f%n", range1.getLength());
+        System.out.printf("Начало диапазона: %.1f%n", range1.getFrom());
+        System.out.printf("Конец диапазона: %.1f%n", range1.getTo());
+        System.out.printf("Длина диапазона: %.1f%n", range1.getLength());
 
         Scanner scanner = new Scanner(System.in);
 
@@ -21,8 +21,7 @@ public class Main {
         System.out.print("Введите конец диапазона: ");
         range1.setTo(scanner.nextDouble());
 
-        System.out.println(range1.toString());
-        System.out.printf("Длина диапазона: %.2f%n", range1.getLength());
+        System.out.printf("Длина диапазона: %.1f%n", range1.getLength());
 
         System.out.print("Введите вещественное число: ");
         double number = scanner.nextDouble();
@@ -30,37 +29,37 @@ public class Main {
         boolean isNumberInsideRange = range1.isInside(number);
 
         if (isNumberInsideRange) {
-            System.out.printf("Число: %.2f принадлежит диапазону%n", number);
+            System.out.printf("Число: %.1f принадлежит диапазону%n", number);
         } else {
-            System.out.printf("Число: %.2f не принадлежит диапазону%n", number);
+            System.out.printf("Число: %.1f не принадлежит диапазону%n", number);
         }
 
         Range range2 = new Range(1.5, 4);
 
         Range[] union = range1.getUnion(range2);
-        System.out.println("Результат объединения диапазонов:");
+        System.out.print("Результат объединения диапазонов:");
 
         for (Range range : union) {
-            System.out.println(range.toString());
+            System.out.println(range);
         }
 
         Range intersection = range1.getIntersection(range2);
-        System.out.println("Результат пересечения двух интервалов:");
+        System.out.print("Результат пересечения двух интервалов:");
 
         if (intersection == null) {
             System.out.println("Пересечения двух интервалов нет");
         } else {
-            System.out.println(range2.toString());
-        }
+            System.out.println(range2);
 
-        Range[] difference = range1.getDifference(range2);
-        System.out.println("Результат разности двух интервалов:");
+            Range[] difference = range1.getDifference(range2);
+            System.out.println("Результат разности двух интервалов:");
 
-        if (difference.length == 0) {
-            System.out.println("0");
-        } else {
-            for (Range range : difference) {
-                System.out.println(range.toString());
+            if (difference.length == 0) {
+                System.out.println("0");
+            } else {
+                for (Range range : difference) {
+                    System.out.println(range);
+                }
             }
         }
     }

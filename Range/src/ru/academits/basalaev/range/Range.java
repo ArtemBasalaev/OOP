@@ -38,17 +38,18 @@ public class Range {
         return number >= from && number <= to;
     }
 
+    @Override
     public String toString() {
-        return String.format("Начало диапазона: %.2f%nКонец диапазона: %.2f", from, to);
+        return String.format("(%.1f; %.1f)", from, to);
     }
 
     public Range[] getUnion(Range range) {
         if (to < range.from) {
-            return new Range[]{new Range(this), new Range(range)};
+            return new Range[]{new Range(from, to), new Range(range)};
         }
 
         if (from > range.to) {
-            return new Range[]{new Range(range), new Range(this)};
+            return new Range[]{new Range(range), new Range(from, to)};
         }
 
         double from = Math.min(this.from, range.from);
@@ -70,7 +71,7 @@ public class Range {
 
     public Range[] getDifference(Range range) {
         if (to <= range.from || from >= range.to) {
-            return new Range[]{new Range(this)};
+            return new Range[]{new Range(from, to)};
         }
 
         if (from >= range.from && to <= range.to) {
@@ -81,7 +82,7 @@ public class Range {
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        double from = this.from > range.from ? range.to : this.from;
+        double from = this.from >= range.from ? range.to : this.from;
         double to = this.to > range.to ? this.to : range.from;
 
         return new Range[]{new Range(from, to)};
