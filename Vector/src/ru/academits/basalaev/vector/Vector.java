@@ -118,7 +118,6 @@ public class Vector {
         }
     }
 
-
     public void reverse() {
         multiplyByScalar(-1);
     }
@@ -135,7 +134,7 @@ public class Vector {
 
     public double getElement(int index) {
         if (index < 0 || index >= elements.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + elements.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + elements.length
                     + " передано значение: " + index);
         }
 
@@ -144,7 +143,7 @@ public class Vector {
 
     public void setElement(int index, double value) {
         if (index < 0 || index >= elements.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + elements.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + elements.length
                     + " передано значение: " + index);
         }
 
@@ -181,7 +180,7 @@ public class Vector {
         return result;
     }
 
-    public static double getScalarComposition(Vector vector1, Vector vector2) {
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
         if (vector1 == null) {
             throw new IllegalArgumentException("В качестве первого аргумента передана пустая ссылка");
         }

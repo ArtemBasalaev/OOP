@@ -2,7 +2,7 @@ package ru.academits.basalaev.vector_main;
 
 import ru.academits.basalaev.vector.Vector;
 
-import static ru.academits.basalaev.vector.Vector.getScalarComposition;
+import static ru.academits.basalaev.vector.Vector.getScalarProduct;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,7 +31,7 @@ public class Main {
         System.out.println("Результат установки компонента вектора по индексу 5:");
         System.out.println(vector1);
 
-        double innerProduct = getScalarComposition(vector1, vector2);
+        double innerProduct = getScalarProduct(vector1, vector2);
         System.out.println("Результат скалярного произведения векторов:");
         System.out.println(innerProduct);
     }
