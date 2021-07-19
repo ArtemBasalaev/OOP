@@ -256,7 +256,7 @@ public class Matrix {
         Vector result = new Vector(vectorSize);
 
         for (int i = 0; i < vectorSize; i++) {
-            double vectorElement = Vector.getScalarComposition(row[i], vector);
+            double vectorElement = Vector.getScalarProduct(row[i], vector);
 
             result.setElement(i, vectorElement);
         }
@@ -350,7 +350,7 @@ public class Matrix {
 
         for (int i = 0; i < columnsCount; i++) {
             for (int j = 0; j < rowsCount; j++) {
-                double vectorElement = Vector.getScalarComposition(matrix1.row[i], matrix2.getColumn(j));
+                double vectorElement = Vector.getScalarProduct(matrix1.row[i], matrix2.getColumn(j));
 
                 result.row[i].setElement(j, vectorElement);
             }
