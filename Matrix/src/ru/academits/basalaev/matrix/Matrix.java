@@ -153,7 +153,7 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= row.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + row.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + row.length
                     + " передано значение: " + index);
         }
 
@@ -166,7 +166,7 @@ public class Matrix {
         }
 
         if (index < 0 || index >= row.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + row.length
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + row.length
                     + " передано значение: " + index);
         }
 
@@ -175,7 +175,7 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= row[0].getSize()) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 < index < " + row[0].getSize()
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + row[0].getSize()
                     + " передано значение: " + index);
         }
 
@@ -330,7 +330,7 @@ public class Matrix {
         return result;
     }
 
-    public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {
+    public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1 == null) {
             throw new IllegalArgumentException("В качестве первого аргумента передана пустая ссылка");
         }

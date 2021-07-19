@@ -45,10 +45,10 @@ public class Main {
         Matrix matrix4 = new Matrix(new double[][]{{1, 0}, {0, 1}, {1, 1}});
 
         System.out.println("Результат умножения матриц: matrix3 * matrix4");
-        System.out.println(Matrix.getComposition(matrix3, matrix4));
+        System.out.println(Matrix.getProduct(matrix3, matrix4));
 
         System.out.println("Результат умножения матриц: matrix4 * matrix3");
-        System.out.println(Matrix.getComposition(matrix4, matrix3));
+        System.out.println(Matrix.getProduct(matrix4, matrix3));
 
         Vector vector = new Vector(new double[]{2, -3, 1});
         System.out.println("Результат умножения матрицы на вектор\n" + matrix1.getMultiplyByVector(vector));
