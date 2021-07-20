@@ -37,29 +37,29 @@ public class Main {
         Range range2 = new Range(1.5, 4);
 
         Range[] union = range1.getUnion(range2);
-        System.out.print("Результат объединения диапазонов:");
+        System.out.print("Результат объединения диапазонов: ");
 
         for (Range range : union) {
             System.out.println(range);
         }
 
         Range intersection = range1.getIntersection(range2);
-        System.out.print("Результат пересечения двух интервалов:");
+        System.out.print("Результат пересечения двух интервалов: ");
 
         if (intersection == null) {
             System.out.println("Пересечения двух интервалов нет");
         } else {
             System.out.println(range2);
+        }
 
-            Range[] difference = range1.getDifference(range2);
-            System.out.println("Результат разности двух интервалов:");
+        Range[] difference = range1.getDifference(range2);
+        System.out.println("Результат разности двух интервалов: ");
 
-            if (difference.length == 0) {
-                System.out.println("0");
-            } else {
-                for (Range range : difference) {
-                    System.out.println(range);
-                }
+        if (difference.length == 0) {
+            System.out.println("разность диапазонов пустая");
+        } else {
+            for (Range range : difference) {
+                System.out.println(range);
             }
         }
     }

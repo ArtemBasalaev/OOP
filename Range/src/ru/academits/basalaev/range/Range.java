@@ -45,11 +45,11 @@ public class Range {
 
     public Range[] getUnion(Range range) {
         if (to < range.from) {
-            return new Range[]{new Range(from, to), new Range(range)};
+            return new Range[]{new Range(this), new Range(range)};
         }
 
         if (from > range.to) {
-            return new Range[]{new Range(range), new Range(from, to)};
+            return new Range[]{new Range(range), new Range(this)};
         }
 
         double from = Math.min(this.from, range.from);
@@ -71,7 +71,7 @@ public class Range {
 
     public Range[] getDifference(Range range) {
         if (to <= range.from || from >= range.to) {
-            return new Range[]{new Range(from, to)};
+            return new Range[]{new Range(this)};
         }
 
         if (from >= range.from && to <= range.to) {
