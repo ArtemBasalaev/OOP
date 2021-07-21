@@ -51,15 +51,19 @@ public class Main {
         System.out.println(Matrix.getProduct(matrix4, matrix3));
 
         Vector vector = new Vector(new double[]{2, -3, 1});
-        System.out.println("Результат умножения матрицы на вектор\n" + matrix1.getMultiplyByVector(vector));
+        System.out.println("Результат умножения матрицы на вектор:");
+        System.out.println(matrix1.getProductByVector(vector));
 
         Matrix matrix5 = new Matrix(new double[][]{{1.9, 2.1, 5.1}, {4.2, 6.1, 3.1}, {5.7, 4.2, 2.8}});
-        System.out.printf("Определитель матрицы determinant = %.2f%n", matrix5.getMatrixDeterminant());
+        System.out.printf("Определитель матрицы determinant = %.2f%n", matrix5.getDeterminant());
 
-        System.out.println("Результат транспонирования матрицы\n" + matrix1.getTranspose());
+        matrix1.transpose();
+        System.out.println("Результат транспонирования матрицы");
+        System.out.println(matrix1);
 
         Vector[] array3 = {new Vector(5), new Vector(3), new Vector(new double[]{1, 10})};
         Matrix matrix6 = new Matrix(array3);
-        System.out.println("Создание матрицы из массива векторов:\n" + matrix6);
+        System.out.println("Создание матрицы из массива векторов:");
+        System.out.println(matrix6);
     }
 }
