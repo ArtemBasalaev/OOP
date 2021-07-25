@@ -161,8 +161,7 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + rows.length
-                    + " передано значение: " + index);
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + rows.length + " передано значение: " + index);
         }
 
         return new Vector(rows[index]);
@@ -174,8 +173,7 @@ public class Matrix {
         }
 
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + rows.length
-                    + " передано значение: " + index);
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + rows.length + " передано значение: " + index);
         }
 
         rows[index] = new Vector(vector);
@@ -183,8 +181,7 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= getColumnsCount()) {
-            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + getColumnsCount()
-                    + " передано значение: " + index);
+            throw new IndexOutOfBoundsException("Допустимый диапазон индекса 0 <= index < " + getColumnsCount() + " передано значение: " + index);
         }
 
         double[] column = new double[rows.length];
