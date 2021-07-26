@@ -43,8 +43,12 @@ public class Matrix {
         Vector emptyVector = new Vector(columnsCount);
 
         for (int i = 0; i < array.length; i++) {
-            rows[i] = new Vector(array[i]);
-            rows[i].add(emptyVector);
+            if (array[i].length == 0) {
+                rows[i] = new Vector(columnsCount);
+            } else {
+                rows[i] = new Vector(array[i]);
+                rows[i].add(emptyVector);
+            }
         }
     }
 

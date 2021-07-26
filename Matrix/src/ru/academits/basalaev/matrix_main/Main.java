@@ -9,14 +9,14 @@ public class Main {
                 {2, 5, 6},
                 {3, 7, 8},
                 {5, 6},
-                {0, 0, 0}
+                {5, 0, 0}
         };
 
         double[][] array2 = {
                 {8, 5, 4},
                 {7, 3, 2},
                 {5, 4, 10},
-                {10, 10, 10}
+                {}
         };
 
         Matrix matrix1 = new Matrix(array1);
