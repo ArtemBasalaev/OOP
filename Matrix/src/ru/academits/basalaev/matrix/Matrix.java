@@ -108,7 +108,7 @@ public class Matrix {
     }
 
     private static void checkSizeEquals(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.getRowsCount() != matrix2.getRowsCount() && matrix1.getColumnsCount() != matrix2.getColumnsCount()) {
+        if (matrix1.getRowsCount() != matrix2.getRowsCount() || matrix1.getColumnsCount() != matrix2.getColumnsCount()) {
             throw new IllegalArgumentException("Матрицы имеют разный размер:"
                     + " размер первой матрицы " + matrix1.getRowsCount() + " х " + matrix1.getColumnsCount()
                     + ", размер второй матрицы " + matrix2.getRowsCount() + " х " + matrix2.getColumnsCount());
