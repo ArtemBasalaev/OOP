@@ -29,16 +29,16 @@ public class Main {
             }
         }
 
-        ArrayList<Integer> list3 = new ArrayList<>(Arrays.asList(8, 5, 5, 7, 5, 1, 4, 8, 8, 3, 3, 3, 5, 2, 1, 4, 2, 2, 7, 7));
+        ArrayList<Integer> list3 = new ArrayList<>(Arrays.asList(8, 5, 5, 7, 255, 1, 4, 8, 8, 3, 3, 3, 5, 255, 1, 4, 2, 2, 7, 7));
 
         ArrayList<Integer> list4 = new ArrayList<>();
         int list4Size = 0;
 
-        for (int listElement : list3) {
+        for (Integer listElement : list3) {
             boolean isListElementDuplicate = false;
 
             for (int j = 0; j < list4Size; j++) {
-                if (list4.get(j) == listElement) {
+                if (list4.get(j).equals(listElement)) {
                     isListElementDuplicate = true;
 
                     break;
