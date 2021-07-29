@@ -29,20 +29,26 @@ public class Main {
             }
         }
 
-        ArrayList<Integer> list3 = new ArrayList<>(Arrays.asList(8, 5, 5, 5, 1, 4, 8, 3, 3, 3, 5, 2, 1, 4));
+        ArrayList<Integer> list3 = new ArrayList<>(Arrays.asList(8, 5, 5, 7, 5, 1, 4, 8, 8, 3, 3, 3, 5, 2, 1, 4, 2, 2, 7, 7));
 
-        int list3Size = list3.size();
+        ArrayList<Integer> list4 = new ArrayList<>();
+        int list4Size = 0;
 
-        for (int i = 0; i < list3Size; i++) {
-            int listElement = list3.get(i);
+        for (int listElement : list3) {
+            boolean isListElementDuplicate = false;
 
-            for (int j = i + 1; j < list3Size; j++) {
-                if (list3.get(j) == listElement) {
-                    list3.remove(j);
+            for (int j = 0; j < list4Size; j++) {
+                if (list4.get(j) == listElement) {
+                    isListElementDuplicate = true;
 
-                    list3Size--;
-                    j--;
+                    break;
                 }
+            }
+
+            if (!isListElementDuplicate) {
+                list4.add(listElement);
+
+                list4Size++;
             }
         }
     }
