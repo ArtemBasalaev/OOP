@@ -1,6 +1,6 @@
 package ru.academits.basalaev.list;
 
-public class ListItem<T> {
+class ListItem<T> {
     private T data;
     private ListItem<T> next;
 
@@ -27,29 +27,5 @@ public class ListItem<T> {
 
     public void setNext(ListItem<T> next) {
         this.next = next;
-    }
-
-    @Override
-    public String toString() {
-        return data.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        ListItem<T> item = (ListItem<T>) o;
-
-        if (this.getData() == null) {
-            return item.getData() == null;
-        }
-
-        return this.getData().equals(item.getData());
     }
 }
