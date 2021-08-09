@@ -32,7 +32,7 @@ public class Main {
         System.out.println(list);
         System.out.println("Длина списка = " + list.getLength());
 
-        Integer value = 260;
+        Integer value = 74;
         System.out.println("Результат удаления элемента по значению: " + list.remove(value));
         System.out.println("Список после удаления элемента:");
         System.out.println(list);

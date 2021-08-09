@@ -1,6 +1,7 @@
 package ru.academits.basalaev.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
@@ -174,8 +175,7 @@ public class SinglyLinkedList<T> {
         int index = 0;
 
         while (item != null) {
-            if ((item.getData() == null && data == null)
-                    || (item.getData() != null && item.getData().equals(data))) {
+            if (Objects.equals(item.getData(), data)) {
                 remove(index);
 
                 return true;
