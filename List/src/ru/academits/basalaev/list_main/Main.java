@@ -27,12 +27,12 @@ public class Main {
         System.out.println(list);
         System.out.println("Длина списка = " + list.getLength());
 
-        list.add(7, null);
+        list.add(8, null);
         System.out.println("Список после добавления элемента по индексу:");
         System.out.println(list);
         System.out.println("Длина списка = " + list.getLength());
 
-        Integer value = 74;
+        Integer value = 8;
         System.out.println("Результат удаления элемента по значению: " + list.remove(value));
         System.out.println("Список после удаления элемента:");
         System.out.println(list);
