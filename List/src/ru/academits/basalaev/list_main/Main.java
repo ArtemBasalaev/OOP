@@ -13,7 +13,7 @@ public class Main {
         System.out.println("Значение первого элемента = " + list.getFirst());
         System.out.println("Значение элемента с переданным индексом = " + list.get(5));
 
-        System.out.println("Старое значение элемента:" + list.set(5, 74));
+        System.out.println("Старое значение элемента = " + list.set(5, 74));
         System.out.println("Список после установки значения по индексу:");
         System.out.println(list);
 
