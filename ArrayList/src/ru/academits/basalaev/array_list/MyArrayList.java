@@ -1,10 +1,11 @@
-package ru.academits.basalaev.ru.academits.array_list;
+package ru.academits.basalaev.array_list;
 
 import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
     private E[] elements;
     private int length;
+    private int modCount;
 
     public MyArrayList() {
         elements = (E[]) new Object[10];
@@ -16,7 +17,7 @@ public class MyArrayList<E> implements List<E> {
 
     public MyArrayList(E[] array) {
         if (array == null) {
-            throw new IllegalArgumentException("Передана пустая ссылка");
+            throw new NullPointerException("Передана пустая ссылка");
         }
 
         elements = array.length > 0 ? (E[]) new Object[array.length * 2] : (E[]) new Object[10];
@@ -32,16 +33,6 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
-    private void checkElementType(Collection<?> c) {
-        Iterator<?> iterator = c.iterator();
-        Object element = iterator.next();
-
-        if (elements[0].getClass() != element.getClass()) {
-            throw new ClassCastException("Неприводимые типы: хранимый тип в коллекции " + elements[0].getClass()
-                    + ", переданный тип " + element.getClass());
-        }
-    }
-
     private void checkObjectType(Object o) {
         if (elements[0].getClass() != o.getClass()) {
             throw new ClassCastException("Неприводимые типы: хранимый тип в коллекции " + elements[0].getClass()
@@ -49,14 +40,16 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
+    private void checkElementsType(Collection<?> c) {
+        Iterator<?> iterator = c.iterator();
+        Object element = iterator.next();
+
+        checkObjectType(element);
+    }
+
     private void increaseCapacity() {
         elements = Arrays.copyOf(elements, elements.length * 2);
     }
-
-    public int capacity() {
-        return elements.length;
-    }
-
 
     public void ensureCapacity(int capacity) {
         if (elements.length < capacity) {
@@ -74,10 +67,37 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
+    private class MyIterator implements Iterator<E> {
+        private int currentIndex = -1;
+        private final int savedModCount;
+
+        public MyIterator() {
+            savedModCount = modCount;
+        }
+
+        public boolean hasNext() {
+            return currentIndex + 1 < length;
+        }
+
+        public E next() {
+            currentIndex++;
+
+            if (currentIndex == length) {
+                throw new NoSuchElementException("Коллекция закончилась");
+            }
+
+            if (savedModCount != modCount) {
+                throw new ConcurrentModificationException("Коллекция изменилась");
+            }
+
+            return elements[currentIndex];
+        }
+    }
+
     @Override
     public String toString() {
         if (length == 0) {
-            return null;
+            return "[]";
         }
 
         StringBuilder sb = new StringBuilder("[");
@@ -168,20 +188,18 @@ public class MyArrayList<E> implements List<E> {
         }
 
         elements[length] = element;
+
         length++;
+        modCount++;
 
         return true;
     }
 
     @Override
     public void add(int index, E element) {
-        if (index == length) {
-            add(element);
-
-            return;
+        if (index != length) {
+            checkIndex(index);
         }
-
-        checkIndex(index);
 
         if (length == elements.length) {
             increaseCapacity();
@@ -190,7 +208,9 @@ public class MyArrayList<E> implements List<E> {
         System.arraycopy(elements, index, elements, index + 1, length - index);
 
         elements[index] = element;
+
         length++;
+        modCount++;
     }
 
     @Override
@@ -199,7 +219,7 @@ public class MyArrayList<E> implements List<E> {
             return false;
         }
 
-        checkElementType(c);
+        checkElementsType(c);
 
         int resultLength = length + c.size();
 
@@ -214,6 +234,7 @@ public class MyArrayList<E> implements List<E> {
         }
 
         length = resultLength;
+        modCount++;
 
         return true;
     }
@@ -225,7 +246,7 @@ public class MyArrayList<E> implements List<E> {
         }
 
         checkIndex(index);
-        checkElementType(c);
+        checkElementsType(c);
 
         int resultLength = length + c.size();
 
@@ -242,6 +263,7 @@ public class MyArrayList<E> implements List<E> {
         }
 
         length = resultLength;
+        modCount++;
 
         return true;
     }
@@ -259,17 +281,14 @@ public class MyArrayList<E> implements List<E> {
         elements[length] = null;
 
         length--;
+        modCount++;
 
         return deletedElement;
     }
 
     @Override
     public boolean remove(Object o) {
-        if (length == 0) {
-            return false;
-        }
-
-        if (o == null) {
+        if (length == 0 || o == null) {
             return false;
         }
 
@@ -288,22 +307,18 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        if (length == 0) {
+        if (length == 0 || c == null) {
             return false;
         }
 
-        if (c == null) {
-            return false;
-        }
-
-        checkElementType(c);
+        checkElementsType(c);
 
         Iterator<E> iterator = (Iterator<E>) c.iterator();
 
         boolean isRemoveAll = false;
 
         while (iterator.hasNext()) {
-            E element = iterator.next();
+             E element = iterator.next();
 
             for (int i = length - 1; i >= 0; i--) {
                 if (Objects.equals(elements[i], element)) {
@@ -319,15 +334,11 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        if (length == 0) {
+        if (length == 0 || c == null) {
             return false;
         }
 
-        if (c == null) {
-            return false;
-        }
-
-        checkElementType(c);
+        checkElementsType(c);
 
         E[] newElements = (E[]) new Object[elements.length];
         int newLength = 0;
@@ -352,16 +363,14 @@ public class MyArrayList<E> implements List<E> {
         elements = newElements;
         length = newLength;
 
+        modCount++;
+
         return length != 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        if (length == 0) {
-            return false;
-        }
-
-        if (o == null) {
+        if (length == 0 || o == null) {
             return false;
         }
 
@@ -378,16 +387,38 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
+        if (length == 0 || c == null) {
+            return false;
+        }
+
+        checkElementsType(c);
+
+        Iterator<E> iterator = (Iterator<E>) c.iterator();
+
+        while (iterator.hasNext()) {
+            boolean isContainsAll = false;
+
+            E element = iterator.next();
+
+            for (int i = 0; i < length; i++) {
+                if (Objects.equals(elements[i], element)) {
+                    isContainsAll = true;
+
+                    break;
+                }
+            }
+
+            if (!isContainsAll) {
+                return false;
+            }
+        }
+
         return true;
     }
 
     @Override
     public int indexOf(Object o) {
-        if (length == 0) {
-            return -1;
-        }
-
-        if (o == null) {
+        if (length == 0 || o == null) {
             return -1;
         }
 
@@ -404,11 +435,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public int lastIndexOf(Object o) {
-        if (length == 0) {
-            return -1;
-        }
-
-        if (o == null) {
+        if (length == 0 || o == null) {
             return -1;
         }
 
@@ -427,17 +454,23 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public Object[] toArray() {
-        return null;
+        return Arrays.copyOf(elements, length);
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if (a.length < length) {
+            a = (T[]) new Object[length];
+        }
+
+        System.arraycopy(elements, 0, a, 0, length);
+
+        return a;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new MyIterator();
     }
 
     // без реализации
