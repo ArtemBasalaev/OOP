@@ -157,6 +157,8 @@ public class MyArrayList<E> implements List<E> {
     @Override
     public void clear() {
         elements = (E[]) new Object[elements.length];
+        length = 0;
+        modCount = 0;
     }
 
     @Override
@@ -318,7 +320,7 @@ public class MyArrayList<E> implements List<E> {
         boolean isRemoveAll = false;
 
         while (iterator.hasNext()) {
-             E element = iterator.next();
+            E element = iterator.next();
 
             for (int i = length - 1; i >= 0; i--) {
                 if (Objects.equals(elements[i], element)) {
