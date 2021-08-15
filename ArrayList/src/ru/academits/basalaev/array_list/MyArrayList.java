@@ -128,6 +128,10 @@ public class MyArrayList<E> implements List<E> {
             return false;
         }
 
+        if (hashCode() != list.hashCode()) {
+            return false;
+        }
+
         for (int i = 0; i < length; i++) {
             if (!Objects.equals(elements[i], list.elements[i])) {
                 return false;
