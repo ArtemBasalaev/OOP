@@ -141,8 +141,6 @@ public class SinglyLinkedList<T> {
             checkIndex(index);
         }
 
-        ListItem<T> item = new ListItem<>(data);
-
         if (index == 0) {
             addFirst(data);
 
@@ -152,6 +150,8 @@ public class SinglyLinkedList<T> {
         ListItem<T> previousItem = getItem(index - 1);
         ListItem<T> currentItem = previousItem.getNext();
 
+        ListItem<T> item = new ListItem<>(data);
+
         previousItem.setNext(item);
         item.setNext(currentItem);
 
@@ -159,19 +159,20 @@ public class SinglyLinkedList<T> {
     }
 
     public boolean remove(T data) {
+        if (length == 0) {
+            throw new NoSuchElementException("Список пустой");
+        }
+
         if (Objects.equals(head.getData(), data)) {
             removeFirst();
 
             return true;
         }
 
-        ListItem<T> item = head;
-        ListItem<T> previousItem;
+        ListItem<T> previousItem = head;
+        ListItem<T> item = previousItem.getNext();
 
         while (item != null) {
-            previousItem = item;
-            item = item.getNext();
-
             if (Objects.equals(item.getData(), data)) {
                 previousItem.setNext(item.getNext());
 
@@ -179,6 +180,9 @@ public class SinglyLinkedList<T> {
 
                 return true;
             }
+
+            previousItem = item;
+            item = item.getNext();
         }
 
         return false;
