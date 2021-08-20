@@ -160,7 +160,7 @@ public class SinglyLinkedList<T> {
 
     public boolean remove(T data) {
         if (length == 0) {
-            throw new NoSuchElementException("Список пустой");
+            return false;
         }
 
         if (Objects.equals(head.getData(), data)) {
