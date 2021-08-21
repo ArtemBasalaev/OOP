@@ -3,33 +3,38 @@ package ru.academits.basalaev.hash_table;
 import java.util.*;
 
 public class MyHashTable<E> implements Collection<E> {
-    public LinkedList<E>[] hashTable;
+    private LinkedList<E>[] hashTable;
     private int tableCapacity = 100;
-    public int length;
-    public int modCount;
+    private int length;
+    private int modCount;
 
     public MyHashTable() {
         hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
     }
 
     public MyHashTable(int tableCapacity) {
+        if (tableCapacity < 0) {
+            throw new IllegalArgumentException("Вместимость таблицы не может быть отрицательной, передано значение " + tableCapacity);
+        }
+
         hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
         this.tableCapacity = tableCapacity;
     }
 
     private class MyIterator<E> implements Iterator<E> {
         private final int savedModCount;
-        private int elementsCount;
-        private int currentList;
+        private int itemsCount;
+
+        private int currentList = -1;
         private ListIterator<E> currentListIterator;
 
         public MyIterator() {
             savedModCount = modCount;
-            currentListIterator = iterator();
+            currentListIterator = getListIterator();
         }
 
-        private ListIterator<E> iterator() {
-            currentListIterator = null;
+        private ListIterator<E> getListIterator() {
+            currentList++;
 
             while (currentList < hashTable.length) {
                 if (hashTable[currentList] != null && hashTable[currentList].size() != 0) {
@@ -45,13 +50,11 @@ public class MyHashTable<E> implements Collection<E> {
         }
 
         public boolean hasNext() {
-            return elementsCount < length;
+            return itemsCount < length;
         }
 
         public E next() {
-            elementsCount++;
-
-            if (elementsCount > length) {
+            if (currentList == hashTable.length) {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
@@ -59,17 +62,17 @@ public class MyHashTable<E> implements Collection<E> {
                 throw new ConcurrentModificationException("Коллекция изменилась");
             }
 
-            if (!currentListIterator.hasNext()) {
-                currentList++;
+            itemsCount++;
 
-                currentListIterator = iterator();
+            if (!currentListIterator.hasNext()) {
+                currentListIterator = getListIterator();
             }
 
-            return currentListIterator != null ? currentListIterator.next() : null;
+            return currentListIterator.next();
         }
     }
 
-    private int getElementHashCode(Object o) {
+    private int getElementHash(Object o) {
         return Math.abs(Objects.hashCode(o) % tableCapacity);
     }
 
@@ -90,6 +93,8 @@ public class MyHashTable<E> implements Collection<E> {
             sb.append(System.lineSeparator());
         }
 
+        sb.delete(sb.length() - 1, sb.length());
+
         return sb.toString();
     }
 
@@ -106,10 +111,6 @@ public class MyHashTable<E> implements Collection<E> {
         MyHashTable<E> hashTable = (MyHashTable<E>) o;
 
         if (length != hashTable.length) {
-            return false;
-        }
-
-        if (hashCode() != hashTable.hashCode()) {
             return false;
         }
 
@@ -137,28 +138,25 @@ public class MyHashTable<E> implements Collection<E> {
     }
 
     @Override
-    public int size() {
-        return length;
-    }
-
-    @Override
     public boolean isEmpty() {
         return length == 0;
     }
 
     @Override
-    public boolean contains(Object o) {
-        if (o == null) {
-            return false;
+    public void clear() {
+        if (hashTable.length == 0 || length == 0) {
+            return;
         }
 
-        int hash = getElementHashCode(o);
+        Arrays.fill(hashTable, null);
 
-        if (hashTable[hash] == null || hashTable[hash].size() == 0) {
-            return false;
-        }
+        length = 0;
+        modCount++;
+    }
 
-        return hashTable[hash].contains(o);
+    @Override
+    public int size() {
+        return length;
     }
 
     @Override
@@ -167,56 +165,18 @@ public class MyHashTable<E> implements Collection<E> {
     }
 
     @Override
-    public Object[] toArray() {
-        Object[] array = new Object[length];
-
-        int insertPosition = 0;
-
-        for (LinkedList<E> list : hashTable) {
-            if (list == null || list.size() == 0) {
-                continue;
-            }
-
-            Object[] subArray = list.toArray();
-            System.arraycopy(subArray, 0, array, insertPosition, subArray.length);
-
-            insertPosition += subArray.length;
-        }
-
-        return array;
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        if (a.length < length) {
-            a = (T[]) new Object[length];
-        }
-
-        int insertArrayPosition = 0;
-
-        for (LinkedList<E> list : hashTable) {
-            if (list == null || list.size() == 0) {
-                continue;
-            }
-
-            T[] subArray = (T[]) list.toArray();
-            System.arraycopy(subArray, 0, a, insertArrayPosition, subArray.length);
-
-            insertArrayPosition += subArray.length;
-        }
-
-        return a;
-    }
-
-    @Override
     public boolean add(E e) {
-        int hash = getElementHashCode(e);
-
-        if (hashTable[hash] == null) {
-            hashTable[hash] = new LinkedList<>();
+        if (hashTable.length == 0) {
+            hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
         }
 
-        hashTable[hash].add(e);
+        int elementHash = getElementHash(e);
+
+        if (hashTable[elementHash] == null) {
+            hashTable[elementHash] = new LinkedList<>();
+        }
+
+        hashTable[elementHash].add(e);
 
         length++;
         modCount++;
@@ -225,14 +185,31 @@ public class MyHashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean remove(Object o) {
-        int hash = getElementHashCode(o);
+    public boolean addAll(Collection<? extends E> c) {
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка");
+        }
 
-        if (hashTable[hash] == null || hashTable[hash].size() == 0) {
+        if (c.size() == 0) {
             return false;
         }
 
-        if (hashTable[hash].remove(o)) {
+        for (E element : c) {
+            add(element);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        int elementHash = getElementHash(o);
+
+        if (hashTable[elementHash] == null) {
+            return false;
+        }
+
+        if (hashTable[elementHash].remove(o)) {
             length--;
             modCount++;
 
@@ -243,81 +220,20 @@ public class MyHashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        if (length == 0 || c == null) {
-            return false;
-        }
-
-        Iterator<E> iterator = (Iterator<E>) c.iterator();
-
-        while (iterator.hasNext()) {
-            E element = iterator.next();
-
-            int hash = getElementHashCode(element);
-
-            if (hashTable[hash] == null || hashTable[hash].size() == 0) {
-                return false;
-            }
-
-            if (!hashTable[hash].contains(element)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        if (c == null) {
-            return false;
-        }
-
-        Iterator<E> iterator = (Iterator<E>) c.iterator();
-
-        while (iterator.hasNext()) {
-            E element = iterator.next();
-
-            int hash = getElementHashCode(element);
-
-            if (hashTable[hash] == null) {
-                hashTable[hash] = new LinkedList<>();
-            }
-
-            hashTable[hash].add(element);
-
-            modCount++;
-        }
-
-        length += c.size();
-
-        return true;
-    }
-
-    @Override
     public boolean removeAll(Collection<?> c) {
         if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка");
+        }
+
+        if (c.size() == 0 || length == 0) {
             return false;
         }
 
         boolean isRemove = false;
 
-        Iterator<E> iterator = (Iterator<E>) c.iterator();
-
-        while (iterator.hasNext()) {
-            E element = iterator.next();
-
-            int hash = getElementHashCode(element);
-
-            if (hashTable[hash] == null || hashTable[hash].size() == 0) {
-                continue;
-            }
-
-            if (hashTable[hash].remove(element)) {
+        for (Object element : c) {
+            while (remove(element)) {
                 isRemove = true;
-
-                length--;
-                modCount++;
             }
         }
 
@@ -325,47 +241,101 @@ public class MyHashTable<E> implements Collection<E> {
     }
 
     public boolean retainAll(Collection<?> c) {
-        if (length == 0 || c == null) {
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка");
+        }
+
+        if (c.size() == 0 || length == 0) {
             return false;
         }
 
-        LinkedList<E>[] newHashTable = (LinkedList<E>[]) new Object[tableCapacity];
-        int newLength = 0;
+        boolean haveDifference = false;
 
-        for (E element : this) {
-            Iterator<E> collectionIterator = (Iterator<E>) c.iterator();
+        for (LinkedList<E> list : hashTable) {
+            if (list == null || list.size() == 0) {
+                continue;
+            }
 
-            while (collectionIterator.hasNext()) {
-                E collectionElement = collectionIterator.next();
+            Iterator<E> listIterator = list.listIterator();
 
-                if (Objects.equals(element, collectionElement)) {
-                    int elementHash = getElementHashCode(element);
+            while (listIterator.hasNext()) {
+                if (!c.contains(listIterator.next())) {
+                    listIterator.remove();
 
-                    if (newHashTable[elementHash] == null) {
-                        newHashTable[elementHash] = new LinkedList<>();
-                    }
+                    haveDifference = true;
 
-                    newHashTable[elementHash].add(element);
-
-                    newLength++;
+                    length--;
                     modCount++;
-
-                    break;
                 }
             }
         }
 
-        hashTable = newHashTable;
-        length = newLength;
+        return haveDifference;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        int hash = getElementHash(o);
+
+        if (hashTable[hash] == null) {
+            return false;
+        }
+
+        return hashTable[hash].contains(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка");
+        }
+
+        if (c.size() == 0 || length == 0) {
+            return false;
+        }
+
+        for (Object element : c) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
 
         return true;
     }
 
     @Override
-    public void clear() {
-        hashTable = (LinkedList<E>[]) new Object[100];
+    public Object[] toArray() {
+        Object[] array = new Object[length];
 
-        length = 0;
-        modCount = 0;
+        int index = 0;
+
+        for (E element : this) {
+            array[index] = element;
+
+            index++;
+        }
+
+        return array;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        if (a.length < length) {
+            a = Arrays.copyOf(a, length);
+        }
+
+        int index = 0;
+
+        for (E element : this) {
+            a[index] = (T) element;
+
+            index++;
+        }
+
+        if (a.length > length) {
+            a[length] = null;
+        }
+
+        return a;
     }
 }
