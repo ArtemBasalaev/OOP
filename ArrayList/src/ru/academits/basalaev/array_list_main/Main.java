@@ -70,6 +70,7 @@ public class Main {
         System.out.println("Список преобразованный в массив");
         System.out.println(Arrays.toString(array));
 
+        list1.clear();
         list2.clear();
     }
 }
