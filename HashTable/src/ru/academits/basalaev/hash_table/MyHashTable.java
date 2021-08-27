@@ -5,13 +5,16 @@ import java.util.*;
 public class MyHashTable<E> implements Collection<E> {
     private LinkedList<E>[] hashTable;
     private int tableCapacity = 100;
-    private int length;
+    private int size;
     private int modCount;
 
+
+    @SuppressWarnings("unchecked")
     public MyHashTable() {
         hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
     }
 
+    @SuppressWarnings({"unchecked", "unused"})
     public MyHashTable(int tableCapacity) {
         if (tableCapacity < 0) {
             throw new IllegalArgumentException("Вместимость таблицы не может быть отрицательной, передано значение " + tableCapacity);
@@ -21,6 +24,7 @@ public class MyHashTable<E> implements Collection<E> {
         this.tableCapacity = tableCapacity;
     }
 
+    @SuppressWarnings("TypeParameterHidesVisibleType")
     private class MyIterator<E> implements Iterator<E> {
         private final int savedModCount;
         private int itemsCount;
@@ -50,11 +54,11 @@ public class MyHashTable<E> implements Collection<E> {
         }
 
         public boolean hasNext() {
-            return itemsCount < length;
+            return itemsCount < size;
         }
 
         public E next() {
-            if (currentList == hashTable.length) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
@@ -78,7 +82,7 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public String toString() {
-        if (length == 0) {
+        if (size == 0) {
             return "[]";
         }
 
@@ -98,6 +102,7 @@ public class MyHashTable<E> implements Collection<E> {
         return sb.toString();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,7 +115,7 @@ public class MyHashTable<E> implements Collection<E> {
 
         MyHashTable<E> hashTable = (MyHashTable<E>) o;
 
-        if (length != hashTable.length) {
+        if (size != hashTable.size) {
             return false;
         }
 
@@ -139,24 +144,24 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public boolean isEmpty() {
-        return length == 0;
+        return size == 0;
     }
 
     @Override
     public void clear() {
-        if (hashTable.length == 0 || length == 0) {
+        if (hashTable.length == 0 || size == 0) {
             return;
         }
 
         Arrays.fill(hashTable, null);
 
-        length = 0;
+        size = 0;
         modCount++;
     }
 
     @Override
     public int size() {
-        return length;
+        return size;
     }
 
     @Override
@@ -164,6 +169,7 @@ public class MyHashTable<E> implements Collection<E> {
         return new MyIterator<>();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean add(E e) {
         if (hashTable.length == 0) {
@@ -178,7 +184,7 @@ public class MyHashTable<E> implements Collection<E> {
 
         hashTable[elementHash].add(e);
 
-        length++;
+        size++;
         modCount++;
 
         return true;
@@ -210,7 +216,7 @@ public class MyHashTable<E> implements Collection<E> {
         }
 
         if (hashTable[elementHash].remove(o)) {
-            length--;
+            size--;
             modCount++;
 
             return true;
@@ -225,7 +231,7 @@ public class MyHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
-        if (c.size() == 0 || length == 0) {
+        if (c.size() == 0 || size == 0) {
             return false;
         }
 
@@ -245,11 +251,7 @@ public class MyHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
-        if (c.size() == 0 || length == 0) {
-            return false;
-        }
-
-        boolean haveDifference = false;
+        boolean isRemove = false;
 
         for (LinkedList<E> list : hashTable) {
             if (list == null || list.size() == 0) {
@@ -262,15 +264,15 @@ public class MyHashTable<E> implements Collection<E> {
                 if (!c.contains(listIterator.next())) {
                     listIterator.remove();
 
-                    haveDifference = true;
+                    isRemove = true;
 
-                    length--;
+                    size--;
                     modCount++;
                 }
             }
         }
 
-        return haveDifference;
+        return isRemove;
     }
 
     @Override
@@ -290,10 +292,6 @@ public class MyHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
-        if (c.size() == 0 || length == 0) {
-            return false;
-        }
-
         for (Object element : c) {
             if (!contains(element)) {
                 return false;
@@ -305,7 +303,7 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[length];
+        Object[] array = new Object[size];
 
         int index = 0;
 
@@ -318,10 +316,11 @@ public class MyHashTable<E> implements Collection<E> {
         return array;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
-        if (a.length < length) {
-            a = Arrays.copyOf(a, length);
+        if (a.length < size) {
+            a = Arrays.copyOf(a, size);
         }
 
         int index = 0;
@@ -332,8 +331,8 @@ public class MyHashTable<E> implements Collection<E> {
             index++;
         }
 
-        if (a.length > length) {
-            a[length] = null;
+        if (a.length > size) {
+            a[size] = null;
         }
 
         return a;
