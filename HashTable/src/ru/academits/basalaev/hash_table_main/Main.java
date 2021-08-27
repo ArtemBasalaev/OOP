@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         MyHashTable<Integer> hashTable1 = new MyHashTable<>();
         MyHashTable<Integer> hashTable2 = new MyHashTable<>();
-        MyHashTable<Integer> hashTable3 = new MyHashTable<>();
 
         for (int i = 1; i < 11; i++) {
             hashTable1.add(i);

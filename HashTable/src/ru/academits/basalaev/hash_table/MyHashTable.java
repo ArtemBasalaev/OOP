@@ -3,33 +3,31 @@ package ru.academits.basalaev.hash_table;
 import java.util.*;
 
 public class MyHashTable<E> implements Collection<E> {
-    private LinkedList<E>[] hashTable;
-    private int tableCapacity = 100;
+    private LinkedList<E>[] lists;
+    private static final int defaultArrayLength = 100;
     private int size;
     private int modCount;
 
-
     @SuppressWarnings("unchecked")
     public MyHashTable() {
-        hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
+        lists = (LinkedList<E>[]) new LinkedList[defaultArrayLength];
     }
 
     @SuppressWarnings({"unchecked", "unused"})
-    public MyHashTable(int tableCapacity) {
-        if (tableCapacity < 0) {
-            throw new IllegalArgumentException("Вместимость таблицы не может быть отрицательной, передано значение " + tableCapacity);
+    public MyHashTable(int arrayLength) {
+        if (arrayLength < 1) {
+            throw new IllegalArgumentException("Длина массива для хранения хэш-таблицы не может быть меньше 1, передано значение: " + arrayLength);
         }
 
-        hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
-        this.tableCapacity = tableCapacity;
+        lists = (LinkedList<E>[]) new LinkedList[arrayLength];
     }
 
     @SuppressWarnings("TypeParameterHidesVisibleType")
     private class MyIterator<E> implements Iterator<E> {
         private final int savedModCount;
-        private int itemsCount;
+        private int tableIndex;
 
-        private int currentList = -1;
+        private int currentListIndex = -1;
         private ListIterator<E> currentListIterator;
 
         public MyIterator() {
@@ -38,23 +36,23 @@ public class MyHashTable<E> implements Collection<E> {
         }
 
         private ListIterator<E> getListIterator() {
-            currentList++;
+            currentListIndex++;
 
-            while (currentList < hashTable.length) {
-                if (hashTable[currentList] != null && hashTable[currentList].size() != 0) {
-                    currentListIterator = (ListIterator<E>) hashTable[currentList].iterator();
+            while (currentListIndex < lists.length) {
+                if (lists[currentListIndex] != null && lists[currentListIndex].size() != 0) {
+                    currentListIterator = (ListIterator<E>) lists[currentListIndex].iterator();
 
                     break;
                 }
 
-                currentList++;
+                currentListIndex++;
             }
 
             return currentListIterator;
         }
 
         public boolean hasNext() {
-            return itemsCount < size;
+            return tableIndex < size;
         }
 
         public E next() {
@@ -66,7 +64,7 @@ public class MyHashTable<E> implements Collection<E> {
                 throw new ConcurrentModificationException("Коллекция изменилась");
             }
 
-            itemsCount++;
+            tableIndex++;
 
             if (!currentListIterator.hasNext()) {
                 currentListIterator = getListIterator();
@@ -76,8 +74,8 @@ public class MyHashTable<E> implements Collection<E> {
         }
     }
 
-    private int getElementHash(Object o) {
-        return Math.abs(Objects.hashCode(o) % tableCapacity);
+    private int getTableIndex(Object o) {
+        return Math.abs(Objects.hashCode(o) % lists.length);
     }
 
     @Override
@@ -88,58 +86,21 @@ public class MyHashTable<E> implements Collection<E> {
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < hashTable.length; i++) {
-            if (hashTable[i] == null || hashTable[i].size() == 0) {
+        sb.append("{");
+
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[i] == null || lists[i].size() == 0) {
                 continue;
             }
 
-            sb.append("hashValue = ").append(i).append(" : ").append(hashTable[i]);
+            sb.append("tableIndex = ").append(i).append(" : ").append(lists[i]);
             sb.append(System.lineSeparator());
         }
 
-        sb.delete(sb.length() - 1, sb.length());
+        sb.delete(sb.length() - 2, sb.length());
+        sb.append("}");
 
         return sb.toString();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        MyHashTable<E> hashTable = (MyHashTable<E>) o;
-
-        if (size != hashTable.size) {
-            return false;
-        }
-
-        Iterator<E> iterator = hashTable.iterator();
-
-        for (E e : this) {
-            if (!Objects.equals(e, iterator.next())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 37;
-        int hash = 1;
-
-        for (LinkedList<E> list : hashTable) {
-            hash = prime * hash + Objects.hashCode(list);
-        }
-
-        return hash;
     }
 
     @Override
@@ -149,11 +110,7 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public void clear() {
-        if (hashTable.length == 0 || size == 0) {
-            return;
-        }
-
-        Arrays.fill(hashTable, null);
+        Arrays.fill(lists, null);
 
         size = 0;
         modCount++;
@@ -172,17 +129,17 @@ public class MyHashTable<E> implements Collection<E> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean add(E e) {
-        if (hashTable.length == 0) {
-            hashTable = (LinkedList<E>[]) new LinkedList[tableCapacity];
+        if (lists.length == 0) {
+            lists = (LinkedList<E>[]) new LinkedList[defaultArrayLength];
         }
 
-        int elementHash = getElementHash(e);
+        int tableIndex = getTableIndex(e);
 
-        if (hashTable[elementHash] == null) {
-            hashTable[elementHash] = new LinkedList<>();
+        if (lists[tableIndex] == null) {
+            lists[tableIndex] = new LinkedList<>();
         }
 
-        hashTable[elementHash].add(e);
+        lists[tableIndex].add(e);
 
         size++;
         modCount++;
@@ -209,13 +166,13 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public boolean remove(Object o) {
-        int elementHash = getElementHash(o);
+        int tableIndex = getTableIndex(o);
 
-        if (hashTable[elementHash] == null) {
+        if (lists[tableIndex] == null) {
             return false;
         }
 
-        if (hashTable[elementHash].remove(o)) {
+        if (lists[tableIndex].remove(o)) {
             size--;
             modCount++;
 
@@ -231,7 +188,7 @@ public class MyHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
-        if (c.size() == 0 || size == 0) {
+        if (c.size() == 0) {
             return false;
         }
 
@@ -253,22 +210,18 @@ public class MyHashTable<E> implements Collection<E> {
 
         boolean isRemove = false;
 
-        for (LinkedList<E> list : hashTable) {
+        for (LinkedList<E> list : lists) {
             if (list == null || list.size() == 0) {
                 continue;
             }
 
-            Iterator<E> listIterator = list.listIterator();
+            int initialListSize = list.size();
 
-            while (listIterator.hasNext()) {
-                if (!c.contains(listIterator.next())) {
-                    listIterator.remove();
+            if (list.retainAll(c)) {
+                isRemove = true;
 
-                    isRemove = true;
-
-                    size--;
-                    modCount++;
-                }
+                size -= initialListSize - list.size();
+                modCount++;
             }
         }
 
@@ -277,13 +230,9 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public boolean contains(Object o) {
-        int hash = getElementHash(o);
+        int tableIndex = getTableIndex(o);
 
-        if (hashTable[hash] == null) {
-            return false;
-        }
-
-        return hashTable[hash].contains(o);
+        return lists[tableIndex] != null && lists[tableIndex].contains(o);
     }
 
     @Override
@@ -320,7 +269,7 @@ public class MyHashTable<E> implements Collection<E> {
     @Override
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
-            a = Arrays.copyOf(a, size);
+            a = (T[]) Arrays.copyOf(a, size, a.getClass());
         }
 
         int index = 0;
