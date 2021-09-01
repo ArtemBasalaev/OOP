@@ -6,28 +6,29 @@ public class MyArrayList<E> implements List<E> {
     private E[] elements;
     private int size;
     private int modCount;
-    private final int capacity = 10;
+
+    private static final int DEFAULT_CAPACITY = 10;
 
     @SuppressWarnings("unchecked")
     public MyArrayList() {
-        elements = (E[]) new Object[capacity];
+        elements = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
-    @SuppressWarnings("unchecked")
     public MyArrayList(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException("Вместимость списка не может быть отрицательным числом, передано значение " + capacity);
         }
 
+        //noinspection unchecked
         elements = (E[]) new Object[capacity];
     }
 
-    @SuppressWarnings("unchecked")
     public MyArrayList(E[] array) {
         if (array == null) {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
+        //noinspection unchecked
         elements = (E[]) new Object[array.length];
 
         System.arraycopy(array, 0, elements, 0, array.length);
@@ -42,11 +43,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     private void increaseCapacity() {
-        int capacity = elements.length * 2;
-
-        if (elements.length == 0) {
-            capacity = this.capacity;
-        }
+        int capacity = elements.length > 0 ? elements.length * 2 : DEFAULT_CAPACITY;
 
         elements = Arrays.copyOf(elements, capacity);
     }
@@ -108,7 +105,6 @@ public class MyArrayList<E> implements List<E> {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,6 +115,7 @@ public class MyArrayList<E> implements List<E> {
             return false;
         }
 
+        //noinspection unchecked
         MyArrayList<E> list = (MyArrayList<E>) o;
 
         if (size != list.size) {
@@ -153,10 +150,6 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
-        if (elements.length == 0 || size == 0) {
-            return;
-        }
-
         for (int i = 0; i < size; i++) {
             elements[i] = null;
         }
@@ -200,7 +193,7 @@ public class MyArrayList<E> implements List<E> {
             checkIndex(index);
         }
 
-        if (elements.length == 0 || size == elements.length) {
+        if (size == elements.length) {
             increaseCapacity();
         }
 
@@ -233,11 +226,9 @@ public class MyArrayList<E> implements List<E> {
             checkIndex(index);
         }
 
-        int resultLength = size + collectionSize;
+        int resultSize = size + collectionSize;
 
-        if (resultLength > elements.length) {
-            ensureCapacity(resultLength);
-        }
+        ensureCapacity(resultSize);
 
         System.arraycopy(elements, index, elements, index + collectionSize, size - index);
 
@@ -249,7 +240,7 @@ public class MyArrayList<E> implements List<E> {
             i++;
         }
 
-        size = resultLength;
+        size = resultSize;
 
         modCount++;
 
@@ -376,13 +367,14 @@ public class MyArrayList<E> implements List<E> {
         return Arrays.copyOf(elements, size);
     }
 
-    @SuppressWarnings({"unchecked", "SuspiciousSystemArraycopy"})
     @Override
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
+            //noinspection unchecked
             return (T[]) Arrays.copyOf(elements, size, a.getClass());
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
 
         if (a.length > size) {
