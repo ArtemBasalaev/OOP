@@ -4,21 +4,22 @@ import java.util.*;
 
 public class MyHashTable<E> implements Collection<E> {
     private LinkedList<E>[] lists;
-    private static final int defaultArrayLength = 100;
     private int size;
     private int modCount;
 
+    private static final int DEFAULT_ARRAY_LENGTH = 100;
+
     @SuppressWarnings("unchecked")
     public MyHashTable() {
-        lists = (LinkedList<E>[]) new LinkedList[defaultArrayLength];
+        lists = (LinkedList<E>[]) new LinkedList[DEFAULT_ARRAY_LENGTH];
     }
 
-    @SuppressWarnings({"unchecked", "unused"})
     public MyHashTable(int arrayLength) {
         if (arrayLength < 1) {
             throw new IllegalArgumentException("Длина массива для хранения хэш-таблицы не может быть меньше 1, передано значение: " + arrayLength);
         }
 
+        //noinspection unchecked
         lists = (LinkedList<E>[]) new LinkedList[arrayLength];
     }
 
@@ -126,11 +127,11 @@ public class MyHashTable<E> implements Collection<E> {
         return new MyIterator<>();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(E e) {
         if (lists.length == 0) {
-            lists = (LinkedList<E>[]) new LinkedList[defaultArrayLength];
+            //noinspection unchecked
+            lists = (LinkedList<E>[]) new LinkedList[DEFAULT_ARRAY_LENGTH];
         }
 
         int tableIndex = getTableIndex(e);
@@ -265,16 +266,17 @@ public class MyHashTable<E> implements Collection<E> {
         return array;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
+            //noinspection unchecked
             a = (T[]) Arrays.copyOf(a, size, a.getClass());
         }
 
         int index = 0;
 
         for (E element : this) {
+            //noinspection unchecked
             a[index] = (T) element;
 
             index++;
