@@ -3,11 +3,11 @@ package ru.academits.basalaev.array_list;
 import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
+    private static final int DEFAULT_CAPACITY = 10;
+
     private E[] elements;
     private int size;
     private int modCount;
-
-    private static final int DEFAULT_CAPACITY = 10;
 
     @SuppressWarnings("unchecked")
     public MyArrayList() {
