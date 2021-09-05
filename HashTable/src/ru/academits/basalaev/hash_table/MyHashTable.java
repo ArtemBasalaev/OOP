@@ -3,11 +3,11 @@ package ru.academits.basalaev.hash_table;
 import java.util.*;
 
 public class MyHashTable<E> implements Collection<E> {
+    private static final int DEFAULT_ARRAY_LENGTH = 100;
+
     private LinkedList<E>[] lists;
     private int size;
     private int modCount;
-
-    private static final int DEFAULT_ARRAY_LENGTH = 100;
 
     @SuppressWarnings("unchecked")
     public MyHashTable() {
@@ -111,6 +111,10 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public void clear() {
+        if (size == 0) {
+            return;
+        }
+
         Arrays.fill(lists, null);
 
         size = 0;
@@ -129,11 +133,6 @@ public class MyHashTable<E> implements Collection<E> {
 
     @Override
     public boolean add(E e) {
-        if (lists.length == 0) {
-            //noinspection unchecked
-            lists = (LinkedList<E>[]) new LinkedList[DEFAULT_ARRAY_LENGTH];
-        }
-
         int tableIndex = getTableIndex(e);
 
         if (lists[tableIndex] == null) {
@@ -189,7 +188,7 @@ public class MyHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка");
         }
 
-        if (c.size() == 0) {
+        if (c.size() == 0 || size == 0) {
             return false;
         }
 
@@ -222,8 +221,11 @@ public class MyHashTable<E> implements Collection<E> {
                 isRemove = true;
 
                 size -= initialListSize - list.size();
-                modCount++;
             }
+        }
+
+        if (isRemove) {
+            modCount++;
         }
 
         return isRemove;
