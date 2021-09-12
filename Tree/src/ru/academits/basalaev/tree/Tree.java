@@ -1,7 +1,6 @@
 package ru.academits.basalaev.tree;
 
 import java.util.ArrayDeque;
-import java.util.Stack;
 
 public class Tree<E extends Comparable<E>> {
     private TreeNode<E> root;
@@ -211,21 +210,20 @@ public class Tree<E extends Comparable<E>> {
     }
 
     public void visitDepthFirst() {
-        Stack<TreeNode<E>> stack = new Stack<>();
-
-        stack.push(root);
+        ArrayDeque<TreeNode<E>> stack = new ArrayDeque<>();
+        stack.addLast(root);
 
         while (!stack.isEmpty()) {
-            TreeNode<E> currentNode = stack.pop();
+            TreeNode<E> currentNode = stack.removeLast();
 
             System.out.println(currentNode.getData());
 
             if (currentNode.getRight() != null) {
-                stack.push(currentNode.getRight());
+                stack.addLast(currentNode.getRight());
             }
 
             if (currentNode.getLeft() != null) {
-                stack.push(currentNode.getLeft());
+                stack.addLast(currentNode.getLeft());
             }
         }
     }
