@@ -150,6 +150,10 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
+        if (size == 0) {
+            return;
+        }
+
         for (int i = 0; i < size; i++) {
             elements[i] = null;
         }
