@@ -2,6 +2,8 @@ package ru.academits.basalaev.tree_main;
 
 import ru.academits.basalaev.tree.Tree;
 
+import java.util.function.Consumer;
+
 public class Main {
     public static void main(String[] args) {
         Tree<Integer> tree = new Tree<>(8);
@@ -17,15 +19,15 @@ public class Main {
         tree.insert(9);
         tree.insert(15);
 
-        System.out.println("Количество узлов в дереве: " + tree.getNodesCount());
+        System.out.println("Количество узлов в дереве: " + tree.getSize());
 
-        if (tree.delete(8)) {
+        if (tree.delete(14)) {
             System.out.println("Узел с указанным значением удален из дерва");
         } else {
             System.out.println("Узла с указанным значением нет в дерве");
         }
 
-        System.out.println("Количество узлов в дереве: " + tree.getNodesCount());
+        System.out.println("Количество узлов в дереве: " + tree.getSize());
 
         if (tree.search(15) != null) {
             System.out.println("Узел с указанным значением есть в дереве");
@@ -33,13 +35,15 @@ public class Main {
             System.out.println("Узла с указанным значением нет в дерве");
         }
 
+        Consumer<Integer> destination = System.out::println;
+
         System.out.println("Обход дерева в ширину:");
-        tree.visitBreadthFirst();
+        tree.visitBreadthFirst(destination);
 
         System.out.println("Обход дерева в глубину:");
-        tree.visitDepthFirst();
+        tree.visitDepthFirst(destination);
 
         System.out.println("Обход дерева в глубину с помощью рекурсии:");
-        tree.visitDepthFirstWithRecursion(tree.getRoot());
+        tree.visitDepthFirstWithRecursion(destination);
     }
 }

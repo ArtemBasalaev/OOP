@@ -1,28 +1,48 @@
 package ru.academits.basalaev.tree;
 
 import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.Queue;
+import java.util.function.Consumer;
 
-public class Tree<E extends Comparable<E>> {
+public class Tree<E> {
+    private final Comparator<E> comparator;
+
     private TreeNode<E> root;
-    private int nodesCount;
+    private int size;
 
     public Tree() {
+        comparator = null;
+    }
+
+    public Tree(Comparator<E> comparator) {
+        this.comparator = comparator;
     }
 
     public Tree(E data) {
+        comparator = null;
+
         root = new TreeNode<>(data);
-        nodesCount++;
+        size++;
     }
 
-    public TreeNode<E> getRoot() {
-        return root;
+    private int compare(E data1, E data2) {
+        //noinspection unchecked
+        return comparator == null ? ((Comparable<E>) data1).compareTo(data2) : comparator.compare(data1, data2);
     }
 
     public void insert(E data) {
+        if (data == null) {
+            return;
+        }
+
         TreeNode<E> node = new TreeNode<>(data);
 
         if (root == null) {
             root = node;
+
+            size++;
 
             return;
         }
@@ -32,13 +52,13 @@ public class Tree<E extends Comparable<E>> {
         while (true) {
             E currentData = currentNode.getData();
 
-            if (currentData.compareTo(data) >= 0) {
+            if (compare(currentData, data) >= 0) {
                 if (currentNode.getLeft() != null) {
                     currentNode = currentNode.getLeft();
                 } else {
                     currentNode.setLeft(node);
 
-                    nodesCount++;
+                    size++;
 
                     return;
                 }
@@ -48,7 +68,7 @@ public class Tree<E extends Comparable<E>> {
                 } else {
                     currentNode.setRight(node);
 
-                    nodesCount++;
+                    size++;
 
                     return;
                 }
@@ -66,11 +86,13 @@ public class Tree<E extends Comparable<E>> {
         while (true) {
             E currentData = currentNode.getData();
 
-            if (currentData.compareTo(data) == 0) {
+            int result = compare(currentData, data);
+
+            if (result == 0) {
                 return currentNode;
             }
 
-            if (currentData.compareTo(data) > 0) {
+            if (result > 0) {
                 if (currentNode.getLeft() != null) {
                     currentNode = currentNode.getLeft();
                 } else {
@@ -96,10 +118,14 @@ public class Tree<E extends Comparable<E>> {
 
         boolean isLeftChild = false;
 
-        while (child.getData().compareTo(data) != 0) {
+        while (true) {
             parentNode = child;
 
-            if (parentNode.getData().compareTo(data) > 0) {
+            int result = compare(parentNode.getData(), data);
+
+            if (result == 0) {
+                break;
+            } else if (result > 0) {
                 child = parentNode.getLeft();
                 isLeftChild = true;
             } else {
@@ -110,13 +136,15 @@ public class Tree<E extends Comparable<E>> {
             if (child == null) {
                 return false;
             }
+
+
         }
 
         if (child.getLeft() == null && child.getRight() == null) {
             if (child == root) {
                 root = null;
 
-                nodesCount--;
+                size--;
 
                 return true;
             }
@@ -134,7 +162,7 @@ public class Tree<E extends Comparable<E>> {
                     root = root.getRight();
                 }
 
-                nodesCount--;
+                size--;
 
                 return true;
             }
@@ -173,7 +201,7 @@ public class Tree<E extends Comparable<E>> {
             if (child == root) {
                 root = minLeftNode;
 
-                nodesCount--;
+                size--;
 
                 return true;
             }
@@ -185,38 +213,46 @@ public class Tree<E extends Comparable<E>> {
             }
         }
 
-        nodesCount--;
+        size--;
 
         return true;
     }
 
-    public void visitBreadthFirst() {
-        ArrayDeque<TreeNode<E>> queue = new ArrayDeque<>();
-        queue.addFirst(root);
+    public void visitBreadthFirst(Consumer<E> destination) {
+        if (root == null) {
+            return;
+        }
+
+        Queue<TreeNode<E>> queue = new ArrayDeque<>();
+        queue.add(root);
 
         while (!queue.isEmpty()) {
-            TreeNode<E> currentNode = queue.pop();
+            TreeNode<E> currentNode = queue.remove();
 
-            System.out.println(currentNode.getData());
+            destination.accept(currentNode.getData());
 
             if (currentNode.getLeft() != null) {
-                queue.addLast(currentNode.getLeft());
+                queue.add(currentNode.getLeft());
             }
 
             if (currentNode.getRight() != null) {
-                queue.addLast(currentNode.getRight());
+                queue.add(currentNode.getRight());
             }
         }
     }
 
-    public void visitDepthFirst() {
-        ArrayDeque<TreeNode<E>> stack = new ArrayDeque<>();
+    public void visitDepthFirst(Consumer<E> destination) {
+        if (root == null) {
+            return;
+        }
+
+        Deque<TreeNode<E>> stack = new ArrayDeque<>();
         stack.addLast(root);
 
         while (!stack.isEmpty()) {
             TreeNode<E> currentNode = stack.removeLast();
 
-            System.out.println(currentNode.getData());
+            destination.accept(currentNode.getData());
 
             if (currentNode.getRight() != null) {
                 stack.addLast(currentNode.getRight());
@@ -228,19 +264,27 @@ public class Tree<E extends Comparable<E>> {
         }
     }
 
-    public void visitDepthFirstWithRecursion(TreeNode<E> node) {
-        System.out.println(node.getData());
+    private void visitDepthFirstWithRecursion(TreeNode<E> node, Consumer<E> destination) {
+        if (root == null) {
+            return;
+        }
+
+        destination.accept(node.getData());
 
         if (node.getLeft() != null) {
-            visitDepthFirstWithRecursion(node.getLeft());
+            visitDepthFirstWithRecursion(node.getLeft(), destination);
         }
 
         if (node.getRight() != null) {
-            visitDepthFirstWithRecursion(node.getRight());
+            visitDepthFirstWithRecursion(node.getRight(), destination);
         }
     }
 
-    public int getNodesCount() {
-        return nodesCount;
+    public void visitDepthFirstWithRecursion(Consumer<E> destination) {
+        visitDepthFirstWithRecursion(root, destination);
+    }
+
+    public int getSize() {
+        return size;
     }
 }

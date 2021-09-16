@@ -1,7 +1,8 @@
 package ru.academits.basalaev.tree;
 
 public class TreeNode<E> {
-    private E data;
+    private final E data;
+
     private TreeNode<E> left;
     private TreeNode<E> right;
 
@@ -11,10 +12,6 @@ public class TreeNode<E> {
 
     public E getData() {
         return data;
-    }
-
-    public void setData(E data) {
-        this.data = data;
     }
 
     public TreeNode<E> getLeft() {
