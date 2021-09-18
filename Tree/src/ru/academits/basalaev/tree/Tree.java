@@ -119,13 +119,15 @@ public class Tree<E> {
         boolean isLeftChild = false;
 
         while (true) {
-            parentNode = child;
-
-            int result = compare(parentNode.getData(), data);
+            int result = compare(child.getData(), data);
 
             if (result == 0) {
                 break;
-            } else if (result > 0) {
+            }
+
+            parentNode = child;
+
+            if (result > 0) {
                 child = parentNode.getLeft();
                 isLeftChild = true;
             } else {
@@ -136,8 +138,6 @@ public class Tree<E> {
             if (child == null) {
                 return false;
             }
-
-
         }
 
         if (child.getLeft() == null && child.getRight() == null) {
@@ -189,14 +189,17 @@ public class Tree<E> {
                 minLeftNode = parentMinLeftNode.getLeft();
             }
 
-            if (minLeftNode.getRight() == null) {
-                parentMinLeftNode.setLeft(null);
-            } else {
-                parentMinLeftNode.setLeft(minLeftNode.getRight());
-            }
-
-            minLeftNode.setRight(child.getRight());
             minLeftNode.setLeft(child.getLeft());
+
+            if (minLeftNode != child.getRight()) {
+                if (minLeftNode.getRight() == null) {
+                    parentMinLeftNode.setLeft(null);
+                } else {
+                    parentMinLeftNode.setLeft(minLeftNode.getRight());
+                }
+
+                minLeftNode.setRight(child.getRight());
+            }
 
             if (child == root) {
                 root = minLeftNode;
