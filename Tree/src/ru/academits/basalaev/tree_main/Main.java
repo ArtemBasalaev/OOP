@@ -29,21 +29,21 @@ public class Main {
 
         System.out.println("Количество узлов в дереве: " + tree.getSize());
 
-        if (tree.search(15) != null) {
+        if (tree.search(15)) {
             System.out.println("Узел с указанным значением есть в дереве");
         } else {
             System.out.println("Узла с указанным значением нет в дерве");
         }
 
-        Consumer<Integer> destination = System.out::println;
+        Consumer<Integer> consumer = System.out::println;
 
         System.out.println("Обход дерева в ширину:");
-        tree.visitBreadthFirst(destination);
+        tree.visitBreadthFirst(consumer);
 
         System.out.println("Обход дерева в глубину:");
-        tree.visitDepthFirst(destination);
+        tree.visitDepthFirst(consumer);
 
         System.out.println("Обход дерева в глубину с помощью рекурсии:");
-        tree.visitDepthFirstWithRecursion(destination);
+        tree.visitDepthFirstWithRecursion(consumer);
     }
 }

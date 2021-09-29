@@ -2,7 +2,6 @@ package ru.academits.basalaev.tree;
 
 public class TreeNode<E> {
     private final E data;
-
     private TreeNode<E> left;
     private TreeNode<E> right;
 
