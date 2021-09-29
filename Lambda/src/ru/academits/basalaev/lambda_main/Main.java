@@ -1,6 +1,6 @@
-package ru.academits.basalaev.lymbda_main;
+package ru.academits.basalaev.lambda_main;
 
-import ru.academits.basalaev.person.Person;
+import ru.academits.basalaev.lambda_person.Person;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +25,11 @@ public class Main {
                 .collect(Collectors.toList());
 
         //Б
-        String uniqueNames = uniqueNamesList.stream()
+        String uniqueNamesString = uniqueNamesList.stream()
                 .collect(Collectors.joining(", ", "Имена: ", "."));
 
         System.out.println("В списке содержатся следующие уникальные имена:");
-        System.out.println(uniqueNames);
+        System.out.println(uniqueNamesString);
 
         //В
         int limitAge = 18;
@@ -46,6 +46,9 @@ public class Main {
         //Г
         Map<String, Double> averageAgeByName = persons.stream()
                 .collect(Collectors.groupingBy(Person::getName, Collectors.averagingDouble(Person::getAge)));
+
+        System.out.println("Средний вовраст людей, имеющих одинаковое имя:");
+        averageAgeByName.forEach((name, averageAge) -> System.out.println(name + ": " + averageAge));
 
         //Д
         int minAge = 20;
