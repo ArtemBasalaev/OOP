@@ -6,11 +6,15 @@ public class Person {
 
     public Person(String name, int age) {
         if (age <= 0) {
-            throw new IllegalArgumentException(("Значение возраста должно быть положительным числом, переданное значение age = " + age));
+            throw new IllegalArgumentException("Значение возраста должно быть положительным числом, переданное значение age = " + age);
         }
 
-        if (name == null || name.length() <= 1) {
+        if (name == null) {
             throw new IllegalArgumentException("Необходимо заполнить поле имя");
+        }
+
+        if (name.length() <= 1) {
+            throw new IllegalArgumentException("Имя дожно состоять из более чем одного символа, введено символов: " + name.length());
         }
 
         this.name = name;
