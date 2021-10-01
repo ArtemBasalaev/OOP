@@ -32,7 +32,7 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JPanel degreesEnterPanel = new JPanel();
             frame.add(degreesEnterPanel);
 
-            JLabel degreesEnterLabel = new JLabel("Введите значение температуры");
+            JLabel degreesEnterLabel = new JLabel("Введите значение температуры:");
             degreesEnterPanel.add(degreesEnterLabel);
 
             JPanel inputFieldPanel = new JPanel();
@@ -44,7 +44,7 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JPanel fromTemperatureScalePanel = new JPanel();
             frame.add(fromTemperatureScalePanel);
 
-            JLabel fromTemperatureScaleLabel = new JLabel("Выберите шкалу температур в которую нужен перевод");
+            JLabel fromTemperatureScaleLabel = new JLabel("Выберите шкалу температур из которой необходим перевод:");
             fromTemperatureScalePanel.add(fromTemperatureScaleLabel);
 
             JPanel fromTemperatureScaleRadioButtonPanel = new JPanel();
@@ -68,7 +68,7 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JPanel toTemperatureScalePanel = new JPanel();
             frame.add(toTemperatureScalePanel);
 
-            JLabel toTemperatureScaleLabel = new JLabel("Выберите шкалу температур из которой нужен перевод");
+            JLabel toTemperatureScaleLabel = new JLabel("Выберите шкалу температур в которую необходим перевод:");
             toTemperatureScalePanel.add(toTemperatureScaleLabel);
 
             JPanel toTemperatureScaleRadioButtonPanel = new JPanel();

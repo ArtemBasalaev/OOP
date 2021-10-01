@@ -28,30 +28,18 @@ public class TemperatureModelImpl implements TemperatureModel {
             return degrees;
         }
 
-        if (scaleFrom == CELSIUS) {
-            if (scaleTo == FAHRENHEIT) {
-                return convertCelsiusToFahrenheit(degrees);
-            }
-
-            return convertCelsiusToKelvin(degrees);
-        }
-
         if (scaleFrom == FAHRENHEIT) {
             double celsiusDegrees = convertFahrenheitToCelsius(degrees);
 
-            if (scaleTo == CELSIUS) {
-                return celsiusDegrees;
-            }
-
-            return convertCelsiusToKelvin(celsiusDegrees);
+            return scaleTo == CELSIUS ? celsiusDegrees : convertCelsiusToKelvin(celsiusDegrees);
         }
 
-        double celsiusDegrees = convertKelvinToCelsius(degrees);
+        if (scaleFrom == KELVIN) {
+            double celsiusDegrees = convertKelvinToCelsius(degrees);
 
-        if (scaleTo == CELSIUS) {
-            return celsiusDegrees;
+            return scaleTo == CELSIUS ? celsiusDegrees : convertCelsiusToFahrenheit(celsiusDegrees);
         }
 
-        return convertCelsiusToFahrenheit(celsiusDegrees);
+        return scaleTo == FAHRENHEIT ? convertCelsiusToFahrenheit(degrees) : convertCelsiusToKelvin(degrees);
     }
 }
