@@ -32,8 +32,12 @@ public class Tree<E> {
             return 0;
         }
 
-        if (data1 == null || data2 == null) {
-            return data1 == null ? -1 : 1;
+        if (data1 == null) {
+            return -1;
+        }
+
+        if (data2 == null) {
+            return 1;
         }
 
         //noinspection unchecked
@@ -56,7 +60,7 @@ public class Tree<E> {
         while (true) {
             E currentData = currentNode.getData();
 
-            if (compare(currentData, data) >= 0) {
+            if (compare(currentData, data) > 0) {
                 if (currentNode.getLeft() != null) {
                     currentNode = currentNode.getLeft();
                 } else {
@@ -80,7 +84,7 @@ public class Tree<E> {
         }
     }
 
-    public boolean search(E data) {
+    public boolean contains(E data) {
         if (root == null) {
             return false;
         }
@@ -272,7 +276,7 @@ public class Tree<E> {
     }
 
     private void visitDepthFirstWithRecursion(TreeNode<E> node, Consumer<E> consumer) {
-        if (root == null) {
+        if (node == null) {
             return;
         }
 

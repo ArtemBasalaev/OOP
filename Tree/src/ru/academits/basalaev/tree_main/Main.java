@@ -29,7 +29,7 @@ public class Main {
 
         System.out.println("Количество узлов в дереве: " + tree.getSize());
 
-        if (tree.search(15)) {
+        if (tree.contains(15)) {
             System.out.println("Узел с указанным значением есть в дереве");
         } else {
             System.out.println("Узла с указанным значением нет в дерве");
