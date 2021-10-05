@@ -105,7 +105,7 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JPanel resultPanel = new JPanel();
             frame.add(resultPanel);
 
-            final JLabel resultLabel = new JLabel("");
+            JLabel resultLabel = new JLabel("");
             resultPanel.add(resultLabel);
 
             convertButton.addActionListener(e -> {
