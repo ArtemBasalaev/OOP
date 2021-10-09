@@ -4,20 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TemperatureModelImpl implements TemperatureModel {
-    private final Map<String, CelsiusDegreesConversion> conventionsScale;
+    private final Map<String, CelsiusDegreesConversion> conversionsScale;
 
     public TemperatureModelImpl() {
-        conventionsScale = new HashMap<>();
+        conversionsScale = new HashMap<>();
     }
 
     @Override
     public void addTemperatureScale(String temperatureScale, CelsiusDegreesConversion conversion) {
-        conventionsScale.put(temperatureScale, conversion);
+        conversionsScale.put(temperatureScale, conversion);
     }
 
     @Override
     public void removeTemperatureScale(String temperatureScale) {
-        conventionsScale.remove(temperatureScale);
+        conversionsScale.remove(temperatureScale);
     }
 
     @Override
@@ -27,11 +27,11 @@ public class TemperatureModelImpl implements TemperatureModel {
         }
 
         if (!scaleFrom.equals("цельсий")) {
-            double celsiusDegrees = conventionsScale.get(scaleFrom).convertToCelsius(degrees);
+            double celsiusDegrees = conversionsScale.get(scaleFrom).convertToCelsius(degrees);
 
-            return scaleTo.equals("цельсий") ? celsiusDegrees : conventionsScale.get(scaleTo).convertFromCelsius(celsiusDegrees);
+            return scaleTo.equals("цельсий") ? celsiusDegrees : conversionsScale.get(scaleTo).convertFromCelsius(celsiusDegrees);
         }
 
-        return conventionsScale.get(scaleTo).convertFromCelsius(degrees);
+        return conversionsScale.get(scaleTo).convertFromCelsius(degrees);
     }
 }
