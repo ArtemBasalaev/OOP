@@ -1,6 +1,6 @@
-package ru.academits.basalaev.temperature.model;
+package ru.academits.basalaev.temperature.model.scales;
 
-public interface CelsiusDegreesConversion {
+public interface Scale {
     double convertFromCelsius(double degrees);
 
     double convertToCelsius(double degrees);

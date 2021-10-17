@@ -1,37 +1,40 @@
 package ru.academits.basalaev.temperature.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import ru.academits.basalaev.temperature.model.scales.Scale;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TemperatureModelImpl implements TemperatureModel {
-    private final Map<String, CelsiusDegreesConversion> conversionsScale;
+    private final List<Scale> scalesList;
 
-    public TemperatureModelImpl() {
-        conversionsScale = new HashMap<>();
+    public TemperatureModelImpl(List<Scale> scalesList) {
+        this.scalesList = scalesList;
     }
 
     @Override
-    public void addTemperatureScale(String temperatureScale, CelsiusDegreesConversion conversion) {
-        conversionsScale.put(temperatureScale, conversion);
+    public Scale getScale(int scaleIndex) {
+        return scalesList.get(scaleIndex);
     }
 
     @Override
-    public void removeTemperatureScale(String temperatureScale) {
-        conversionsScale.remove(temperatureScale);
+    public List<String> getScalesNamesList() {
+        List<String> namesScalesList = new ArrayList<>();
+
+        for (Scale scale : scalesList) {
+            namesScalesList.add(scale.toString());
+        }
+
+        return Collections.unmodifiableList(namesScalesList);
     }
 
     @Override
-    public double convert(double degrees, String scaleFrom, String scaleTo) {
-        if (scaleFrom.equals(scaleTo)) {
+    public double convert(double degrees, Scale fromScale, Scale toScale) {
+        if (fromScale == toScale) {
             return degrees;
         }
 
-        if (!scaleFrom.equals("цельсий")) {
-            double celsiusDegrees = conversionsScale.get(scaleFrom).convertToCelsius(degrees);
-
-            return scaleTo.equals("цельсий") ? celsiusDegrees : conversionsScale.get(scaleTo).convertFromCelsius(celsiusDegrees);
-        }
-
-        return conversionsScale.get(scaleTo).convertFromCelsius(degrees);
+        return toScale.convertFromCelsius(fromScale.convertToCelsius(degrees));
     }
 }

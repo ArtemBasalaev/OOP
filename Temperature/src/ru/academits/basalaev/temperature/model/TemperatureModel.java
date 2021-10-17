@@ -1,9 +1,13 @@
 package ru.academits.basalaev.temperature.model;
 
+import ru.academits.basalaev.temperature.model.scales.Scale;
+
+import java.util.List;
+
 public interface TemperatureModel {
-    double convert(double degrees, String scaleFrom, String scaleTo);
+    List<String> getScalesNamesList();
 
-    void addTemperatureScale(String temperatureScale, CelsiusDegreesConversion conversion);
+    Scale getScale(int scaleIndex);
 
-    void removeTemperatureScale(String temperatureScale);
+    double convert(double degrees, Scale fromScale, Scale toScale);
 }

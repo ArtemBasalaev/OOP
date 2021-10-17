@@ -1,30 +1,19 @@
 package ru.academits.basalaev.temperature.view;
 
-import ru.academits.basalaev.temperature.controller.TemperatureController;
+import ru.academits.basalaev.temperature.model.TemperatureModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 import java.util.List;
+
+import static java.lang.String.format;
 
 public class TemperatureWindowImpl implements TemperatureWindow {
     private JFrame frame;
-    private final List<String> temperatureScalesList;
-    private final TemperatureController controller;
+    private final TemperatureModel model;
 
-    public TemperatureWindowImpl(TemperatureController controller) {
-        this.controller = controller;
-
-        temperatureScalesList = new LinkedList<>();
-        temperatureScalesList.add("цельсий");
-    }
-
-    public void addTemperatureScale(String temperatureScale) {
-        temperatureScalesList.add(temperatureScale);
-    }
-
-    public boolean removeTemperatureScale(String temperatureScale) {
-        return temperatureScalesList.remove(temperatureScale);
+    public TemperatureWindowImpl(TemperatureModel model) {
+        this.model = model;
     }
 
     public void start() {
@@ -64,12 +53,6 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JComboBox<String> fromTemperatureScaleComboBox = new JComboBox<>();
             fromTemperatureScaleComboBox.setEditable(true);
 
-            for (String temperatureScale : temperatureScalesList) {
-                fromTemperatureScaleComboBox.addItem(temperatureScale);
-            }
-
-            fromTemperatureScaleList.add(fromTemperatureScaleComboBox);
-
             JPanel toTemperatureScalePanel = new JPanel();
             frame.add(toTemperatureScalePanel);
 
@@ -82,10 +65,14 @@ public class TemperatureWindowImpl implements TemperatureWindow {
             JComboBox<String> toTemperatureScaleComboBox = new JComboBox<>();
             toTemperatureScaleComboBox.setEditable(true);
 
-            for (String temperatureScale : temperatureScalesList) {
-                toTemperatureScaleComboBox.addItem(temperatureScale);
+            List<String> scalesNamesList = model.getScalesNamesList();
+
+            for (String scaleName : scalesNamesList) {
+                fromTemperatureScaleComboBox.addItem(scaleName);
+                toTemperatureScaleComboBox.addItem(scaleName);
             }
 
+            fromTemperatureScaleList.add(fromTemperatureScaleComboBox);
             toTemperatureScaleList.add(toTemperatureScaleComboBox);
 
             JPanel convertPanel = new JPanel();
@@ -111,12 +98,13 @@ public class TemperatureWindowImpl implements TemperatureWindow {
                 try {
                     double degrees = Double.parseDouble(inputField.getText());
 
-                    String scaleFrom = (String) fromTemperatureScaleComboBox.getSelectedItem();
-                    String scaleTo = (String) toTemperatureScaleComboBox.getSelectedItem();
+                    int scaleFromIndex = scalesNamesList.indexOf((String) fromTemperatureScaleComboBox.getSelectedItem());
+                    int scaleToIndex = scalesNamesList.indexOf((String) toTemperatureScaleComboBox.getSelectedItem());
 
-                    resultLabel.setText(String.format("%.2f", controller.convertTemperature(degrees, scaleFrom, scaleTo)));
+                    resultLabel.setText(format("%.2f", model.convert(degrees, model.getScale(scaleFromIndex), model.getScale(scaleToIndex))));
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Допустимо вводить только числа, разделителем дробной части должна быть \".\"");
+                    JOptionPane.showMessageDialog(frame, "Допустимо вводить только числа, разделителем дробной части должна быть \".\"",
+                            "Ошибка", JOptionPane.ERROR_MESSAGE);
                 }
             });
         });
