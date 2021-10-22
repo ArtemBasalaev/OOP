@@ -3,7 +3,7 @@ package ru.academits.basalaev.temperature.model.scales;
 public class KelvinScale implements Scale {
     @Override
     public String toString() {
-        return "кельвин";
+        return "Кельвин";
     }
 
     @Override

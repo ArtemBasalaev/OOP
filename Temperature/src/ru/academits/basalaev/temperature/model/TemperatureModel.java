@@ -5,7 +5,7 @@ import ru.academits.basalaev.temperature.model.scales.Scale;
 import java.util.List;
 
 public interface TemperatureModel {
-    List<String> getScalesNamesList();
+    List<String> getScalesNames();
 
     Scale getScale(int scaleIndex);
 

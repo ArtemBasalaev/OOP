@@ -3,7 +3,7 @@ package ru.academits.basalaev.temperature.model.scales;
 public class FahrenheitScale implements Scale {
     @Override
     public String toString() {
-        return "фаренгейт";
+        return "Фаренгейт";
     }
 
     @Override

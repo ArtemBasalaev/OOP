@@ -19,7 +19,7 @@ public class TemperatureModelImpl implements TemperatureModel {
     }
 
     @Override
-    public List<String> getScalesNamesList() {
+    public List<String> getScalesNames() {
         List<String> namesScalesList = new ArrayList<>();
 
         for (Scale scale : scalesList) {

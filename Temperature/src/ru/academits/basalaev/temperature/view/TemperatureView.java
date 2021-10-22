@@ -1,5 +1,5 @@
 package ru.academits.basalaev.temperature.view;
 
-public interface TemperatureWindow {
+public interface TemperatureView {
     void start();
 }

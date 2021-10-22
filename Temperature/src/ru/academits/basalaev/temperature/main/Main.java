@@ -17,7 +17,7 @@ public class Main {
 
         TemperatureModel model = new TemperatureModelImpl(scalesList);
 
-        TemperatureWindow mainWindow = new TemperatureWindowImpl(model);
+        TemperatureView mainWindow = new SwingTemperatureView(model);
         mainWindow.start();
     }
 }

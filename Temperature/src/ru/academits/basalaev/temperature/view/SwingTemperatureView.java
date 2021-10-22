@@ -8,12 +8,14 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class TemperatureWindowImpl implements TemperatureWindow {
+public class SwingTemperatureView implements TemperatureView {
     private JFrame frame;
     private final TemperatureModel model;
+    private final List<String> scalesNamesList;
 
-    public TemperatureWindowImpl(TemperatureModel model) {
+    public SwingTemperatureView(TemperatureModel model) {
         this.model = model;
+        scalesNamesList = model.getScalesNames();
     }
 
     public void start() {
@@ -64,8 +66,6 @@ public class TemperatureWindowImpl implements TemperatureWindow {
 
             JComboBox<String> toTemperatureScaleComboBox = new JComboBox<>();
             toTemperatureScaleComboBox.setEditable(true);
-
-            List<String> scalesNamesList = model.getScalesNamesList();
 
             for (String scaleName : scalesNamesList) {
                 fromTemperatureScaleComboBox.addItem(scaleName);

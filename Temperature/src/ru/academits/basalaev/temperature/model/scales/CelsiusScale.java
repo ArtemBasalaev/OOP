@@ -3,7 +3,7 @@ package ru.academits.basalaev.temperature.model.scales;
 public class CelsiusScale implements Scale {
     @Override
     public String toString() {
-        return "цельсий";
+        return "Цельсий";
     }
 
     @Override
