@@ -53,7 +53,8 @@ public class SwingTemperatureView implements TemperatureView {
             frame.add(fromTemperatureScaleList);
 
             JComboBox<String> fromTemperatureScaleComboBox = new JComboBox<>();
-            fromTemperatureScaleComboBox.setEditable(true);
+            setComboBoxList(fromTemperatureScaleComboBox);
+            fromTemperatureScaleList.add(fromTemperatureScaleComboBox);
 
             JPanel toTemperatureScalePanel = new JPanel();
             frame.add(toTemperatureScalePanel);
@@ -65,14 +66,7 @@ public class SwingTemperatureView implements TemperatureView {
             frame.add(toTemperatureScaleList);
 
             JComboBox<String> toTemperatureScaleComboBox = new JComboBox<>();
-            toTemperatureScaleComboBox.setEditable(true);
-
-            for (String scaleName : scalesNamesList) {
-                fromTemperatureScaleComboBox.addItem(scaleName);
-                toTemperatureScaleComboBox.addItem(scaleName);
-            }
-
-            fromTemperatureScaleList.add(fromTemperatureScaleComboBox);
+            setComboBoxList(toTemperatureScaleComboBox);
             toTemperatureScaleList.add(toTemperatureScaleComboBox);
 
             JPanel convertPanel = new JPanel();
@@ -108,5 +102,15 @@ public class SwingTemperatureView implements TemperatureView {
                 }
             });
         });
+    }
+
+    private void setComboBoxList(JComboBox<String> comboBox) {
+        comboBox.setEditable(true);
+
+        for (String scaleName : scalesNamesList) {
+            comboBox.addItem(scaleName);
+        }
+
+        comboBox.setEditable(false);
     }
 }
